@@ -1,4 +1,4 @@
-class Agent
+window.Agent = class Agent
   constructor: (@map) ->
     @position = {x: 1, y: 1}
 
@@ -9,7 +9,8 @@ class Agent
     left = {x:point.x-1, y:point.y}
     nonCollidablePoints = []
 
-    nonCollidablePoints.push ncpoint for ncpoint in [up, right, down, left] when map.pointType(ncpoint) is Map.road
+    nonCollidablePoints.push ncpoint for ncpoint in [up, right, down, left] when @map.pointType(ncpoint) is Map.road
+    return nonCollidablePoints
 
   searchNextPoints: -> return @nonCollidablePointsFromPoint(@position)
 
