@@ -21,6 +21,10 @@ window.Point = class Point
   constructor: (@x, @y, @cost, @type) ->
     @visited = false
 
+  equals: (point) -> return point.x == @x and point.y == @y and point.cost == @cost and point.type == @type
+
+  toString: -> "(" + @x + "," + @y + ")"
+
 window.MapFactory = class MapFactory
   @getMap: ->
     data =
