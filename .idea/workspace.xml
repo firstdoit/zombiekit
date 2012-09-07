@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c77ec7b9-93bd-4113-9bcb-7beacf837c51" name="Default" comment="" />
-    <list id="66b64a5c-32b0-4b5b-849e-72c2e50b9e1d" name="New changelist" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/zombiekit.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    <list default="true" id="c77ec7b9-93bd-4113-9bcb-7beacf837c51" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coffee/main.coffee" afterPath="$PROJECT_DIR$/coffee/main.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.html" afterPath="$PROJECT_DIR$/main.html" />
     </list>
+    <list id="66b64a5c-32b0-4b5b-849e-72c2e50b9e1d" name="New changelist" comment="" />
     <ignored path="zombiekit.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,7 +30,7 @@
       <file leaf-file-name="main.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="55" selection-start="273" selection-end="273" vertical-scroll-proportion="-3.75">
+            <state line="14" column="6" selection-start="701" selection-end="701" vertical-scroll-proportion="-8.75">
               <folding />
             </state>
           </provider>
@@ -44,7 +39,7 @@
       <file leaf-file-name="main.coffee" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coffee/main.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="40" selection-end="40" vertical-scroll-proportion="0.0">
+            <state line="17" column="0" selection-start="514" selection-end="514" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -59,10 +54,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="agent.coffee" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="agent.coffee" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coffee/agent.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="52" selection-start="1247" selection-end="1247" vertical-scroll-proportion="-0.44483364">
+            <state line="30" column="52" selection-start="1247" selection-end="1247" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -77,37 +72,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="map.coffee" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="map.coffee" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coffee/map.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="24" selection-start="1384" selection-end="1384" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sound.coffee" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coffee/sound.coffee">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="world.coffee" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coffee/world.coffee">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="entity.coffee" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coffee/entity.coffee">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="18" column="0" selection-start="664" selection-end="664" vertical-scroll-proportion="0.72192514">
               <folding />
             </state>
           </provider>
@@ -128,12 +96,12 @@
       <list>
         <option value="$PROJECT_DIR$/coffee/entity.coffee" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/coffee/main.coffee" />
-        <option value="$PROJECT_DIR$/main.html" />
         <option value="$PROJECT_DIR$/lib/arboreal.js" />
         <option value="$PROJECT_DIR$/coffee/game.coffee" />
-        <option value="$PROJECT_DIR$/coffee/map.coffee" />
         <option value="$PROJECT_DIR$/coffee/agent.coffee" />
+        <option value="$PROJECT_DIR$/main.html" />
+        <option value="$PROJECT_DIR$/coffee/map.coffee" />
+        <option value="$PROJECT_DIR$/coffee/main.coffee" />
       </list>
     </option>
   </component>
@@ -194,6 +162,34 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="zombiekit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="zombiekit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="zombiekit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="zombiekit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="zombiekit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="img" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -291,12 +287,12 @@
     <frame x="-1" y="29" width="1368" height="745" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1370067" sideWeight="0.67001677" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1370067" sideWeight="0.67001677" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -348,7 +344,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="A* finalizado e comentarios" />
+    <option name="LAST_COMMIT_MESSAGE" value="Renderização de um mapa com Tileset" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -367,6 +363,7 @@
     <MESSAGE value="começando implementação de a*" />
     <MESSAGE value="A* faltando apenas custo de caminho" />
     <MESSAGE value="A* finalizado e comentarios" />
+    <MESSAGE value="Renderização de um mapa com Tileset" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -397,13 +394,6 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="55" selection-start="273" selection-end="273" vertical-scroll-proportion="-3.75">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/arboreal.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="88" column="12" selection-start="1901" selection-end="1901" vertical-scroll-proportion="0.0">
@@ -423,17 +413,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/map.coffee">
+    <entry file="file://$PROJECT_DIR$/lib/easeljs-0.5.0.min.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="24" selection-start="1384" selection-end="1384" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/main.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="40" selection-end="40" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="56" column="9" selection-start="22851" selection-end="22851" vertical-scroll-proportion="0.36312848">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -446,7 +431,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/coffee/agent.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="52" selection-start="1247" selection-end="1247" vertical-scroll-proportion="-0.44483364">
+        <state line="30" column="52" selection-start="1247" selection-end="1247" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="6" selection-start="701" selection-end="701" vertical-scroll-proportion="-8.75">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/main.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="514" selection-end="514" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/map.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="664" selection-end="664" vertical-scroll-proportion="0.72192514">
           <folding />
         </state>
       </provider>
