@@ -2,6 +2,7 @@ window.Agent = class Agent
   constructor: (@map) ->
     @position = {x: 1, y: 1}
 
+  ## Find the nonCollidable points dirrectly adjacent from the given point
   nonCollidablePointsFromPoint: (point) ->
     up = @map.findPoint({x:point.x, y:point.y-1})
     right = @map.findPoint({x:point.x+1, y:point.y})
@@ -12,57 +13,67 @@ window.Agent = class Agent
     nonCollidablePoints.push ncpoint for ncpoint in [up, right, down, left] when ncpoint?.type is Map.road
     return nonCollidablePoints
 
-  searchNextPoints: -> return @nonCollidablePointsFromPoint(@position)
-
+  ## A* implementation
   findBestRoute: (originPoint, goalPoint) ->
+    ## Initialize our current point
     currentPoint = originPoint
     currentPoint.visited = true;
-    treeHead = tree = new Arboreal(null, currentPoint)
+    ## Create two tree node variables - head and current
+    treeHead = treeCurrentNode = new Arboreal(null, currentPoint)
+    ## The array for the best route
     bestRoute = []
 
+    ## While we haven't found the goal point
     while not currentPoint.equals goalPoint
+      ## For each navigable point, append it to the current tree node.
       for point in @nonCollidablePointsFromPoint currentPoint
-        if tree.parent?.data.equals point
+        ## If it's the parent, mark it as visited
+        if treeCurrentNode.parent?.data.equals point
           point.visited = true
-        tree.appendChild point
-
-      ##console.log point for point in @nonCollidablePointsFromPoint currentPoint
-
-      ##tree.traverseDown( (node) -> console.log node )
+        treeCurrentNode.appendChild point
 
       ##Fill the unvisitedPoints array
       unvisitedPoints = []
       treeHead.traverseDown( (node) -> unvisitedPoints.push(node.data) if !node.data.visited )
-      betterPoint = unvisitedPoints[0]
-      betterHeuristic = @heuristicValue(betterPoint, originPoint, goalPoint)
-      ##tree.traverseDown( (node) -> console.log node )
 
-      ##Choose the best point to visit next
-      for point in unvisitedPoints
-        point.visited = true;
-        nodeHeuristic = @heuristicValue(point, originPoint, goalPoint)
-        if (nodeHeuristic < betterHeuristic)
-          betterPoint = point
-          betterHeuristic = nodeHeuristic
+      ## Initialize our best point in this round
+      bestPoint = unvisitedPoints[0]
+      bestPointHeuristicValue = @heuristicValue(bestPoint, goalPoint, treeHead)
 
-      currentPoint = betterPoint
-      console.log betterPoint, betterHeuristic
-      ##Atualiza o nó atual da arvore
-      tree = tree.find( (node) -> node.data == currentPoint )
-    ##while
+      ##Choose the best point to visit next from the rest of the unvisited points
+      for point in unvisitedPoints[1..]
+        pointHeuristicValue = @heuristicValue(point, goalPoint, treeHead)
+        if (pointHeuristicValue < bestPointHeuristicValue)
+          bestPoint = point
+          bestPointHeuristicValue = pointHeuristicValue
 
-    while tree
-      bestRoute.push(tree?.data.toString())
-      tree = tree.parent
+      ## Lest visit the best point next
+      currentPoint = bestPoint
+      currentPoint.visited = true;
+      ## Update the current tree node
+      treeCurrentNode = treeHead.find( (node) -> node.data == currentPoint )
+    ## end while
 
-    return bestRoute
+    ## Construct the best route from the bottom of the tree to the head
+    while treeCurrentNode
+      bestRoute.push(treeCurrentNode?.data.toString())
+      treeCurrentNode = treeCurrentNode.parent
 
+    return bestRoute.reverse()
 
-  heuristicValue: (currentPoint, startPoint, goalPoint) ->
-    return @distanceToGoal(currentPoint, goalPoint) + @pathCost(startPoint, currentPoint)
+  ## Calculate the heuristic value of this point, given a goal point and a points tree
+  heuristicValue: (point, goalPoint, treeHead) ->
+    return @distanceToPoint(point, goalPoint) + @pathCost(point, treeHead)
 
-  distanceToGoal: (currentPoint, goalPoint) ->
-    return Math.abs(currentPoint.x - goalPoint.x) + Math.abs(currentPoint.y - goalPoint.y)
+  ## Calculate the Manhattan distance from pointA to pointB
+  distanceToPoint: (pointA, pointB) ->
+    return Math.abs(pointA.x - pointB.x) + Math.abs(pointA.y - pointB.y)
 
-  pathCost: (originPoint, goalPoint) ->
-    return 0
+  ## Calculate the pathCost from this point to the tree head
+  pathCost: (point, treeHead) ->
+    cost = 0;
+    treeB = treeHead.find( (node) -> node.data == point )
+    while treeB
+      cost += treeB.data.cost
+      treeB = treeB.parent
+    return cost

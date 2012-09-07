@@ -19,6 +19,7 @@ window.Map = class Map
 
 window.Point = class Point
   constructor: (@x, @y, @cost, @type) ->
+    @cost = @cost ? 1
     @visited = false
 
   equals: (point) -> return point.x == @x and point.y == @y and point.cost == @cost and point.type == @type
@@ -42,7 +43,7 @@ window.MapFactory = class MapFactory
           y: 0
         },
         {
-          data: [1, 1, 12, 3, 4, -1, 3, -1, -1, 9, -1, 4, 4, 4, 4, -1, 4, -1, 4, -1, -1, 4, 4, 4, 4]
+          data: [4, 4, 4, 4, 4, -1, 4, -1, -1, 4, -1, 4, 4, 4, 4, -1, 4, -1, 4, -1, -1, 4, 4, 4, 4]
           height: 5
           name: "cost"
           opacity: 1
