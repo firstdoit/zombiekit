@@ -1,4 +1,5 @@
-window.Agent = class Agent
+Map = require("./map")
+class Agent
   constructor: (@map) ->
     @position = {x: 1, y: 1}
 
@@ -77,3 +78,7 @@ window.Agent = class Agent
       cost += treeB.data.cost
       treeB = treeB.parent
     return cost
+
+
+## export
+module.exports = Agent

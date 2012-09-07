@@ -1,4 +1,5 @@
-window.Map = class Map
+Point = require("./point")
+class Map
   ##static const
   @road = 109
 
@@ -17,60 +18,5 @@ window.Map = class Map
     cost = @layer('cost').data[index]
     return new Point(coords.x, coords.y, cost, type)
 
-window.Point = class Point
-  constructor: (@x, @y, @cost, @type) ->
-    @cost = @cost ? 1
-    @visited = false
-
-  equals: (point) -> return point.x == @x and point.y == @y and point.cost == @cost and point.type == @type
-
-  toString: -> "(" + @x + "," + @y + ")"
-
-window.MapFactory = class MapFactory
-  @getMap: ->
-    data =
-      height: 5
-      layers: [
-        {
-          data: [109, 109, 109, 109, 109, 130, 109, 105, 130, 109, 130, 109, 109, 109, 109, 130, 109, 130, 109, 106, 105, 109, 109, 109, 109]
-          height: 5
-          name: "type"
-          opacity: 1
-          type: "tilelayer"
-          visible: true
-          width: 5
-          x: 0
-          y: 0
-        },
-        {
-          data: [4, 4, 4, 4, 4, -1, 4, -1, -1, 4, -1, 4, 4, 4, 4, -1, 4, -1, 4, -1, -1, 4, 4, 4, 4]
-          height: 5
-          name: "cost"
-          opacity: 1
-          type: "tilelayer"
-          visible: true
-          width: 5
-          x: 0
-          y: 0
-        }
-      ]
-      orientation: "orthogonal"
-      properties: {}
-      tileheight: 64
-      tilesets: [
-        firstgid: 1
-        image: "Industrial-TileSheet.png"
-        imageheight: 1024
-        imagewidth: 640
-        margin: 0
-        name: "industrial"
-        properties: {}
-        spacing: 0
-        tileheight: 64
-        tilewidth: 64
-      ]
-      tilewidth: 64
-      version: 1
-      width: 5
-
-    return new Map(data)
+## export
+module.exports = Map
