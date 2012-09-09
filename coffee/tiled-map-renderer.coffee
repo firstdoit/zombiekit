@@ -1,3 +1,5 @@
+Q = require("q")
+
 class TileMapRenderer
 
   @findCoordsForIndex: (index, width) ->
@@ -5,8 +7,8 @@ class TileMapRenderer
 
   @renderMapToContext: (map, context) ->
     tileset = new Image()
+    deferred = Q.defer()
     tileset.onload = ->
-      map = window.game.map
       tileWidth = map.data.tilewidth
       tileHeight = map.data.tileheight
       width = map.data.width
@@ -20,8 +22,10 @@ class TileMapRenderer
           dy = (y-1)*tileHeight
           context.drawImage(tileset, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight)
 
+      deferred.resolve(context)
+
     tileset.src = 'img/' + map.data.tilesets[0].image
-    return
+    return deferred.promise
 
 ## export
 module.exports = TileMapRenderer

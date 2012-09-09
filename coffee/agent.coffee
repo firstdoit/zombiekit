@@ -1,4 +1,6 @@
 Map = require("./map")
+Path = require("./path")
+
 class Agent
   constructor: (@map) ->
     @position = {x: 1, y: 1}
@@ -15,7 +17,7 @@ class Agent
     return nonCollidablePoints
 
   ## A* implementation
-  findBestRoute: (originPoint, goalPoint) ->
+  findBestPath: (originPoint, goalPoint) ->
     ## Initialize our current point
     currentPoint = originPoint
     currentPoint.visited = true;
@@ -57,10 +59,10 @@ class Agent
 
     ## Construct the best route from the bottom of the tree to the head
     while treeCurrentNode
-      bestRoute.push(treeCurrentNode?.data.toString())
+      bestRoute.push(treeCurrentNode?.data)
       treeCurrentNode = treeCurrentNode.parent
-
-    return bestRoute.reverse()
+    bestRoute.reverse()
+    return new Path(bestRoute)
 
   ## Calculate the heuristic value of this point, given a goal point and a points tree
   heuristicValue: (point, goalPoint, treeHead) ->
