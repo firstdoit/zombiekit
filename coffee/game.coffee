@@ -14,5 +14,7 @@ class Game
 
     @agent.planPath(@world.map.findPoint({x:4,y:1}), @world.map.findPoint({x:3,y:5}))
 
+    @agent.findBestTour([1,2,3,4,5])
+
 ## export
 module.exports = Game

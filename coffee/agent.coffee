@@ -82,6 +82,20 @@ class Agent
       treeB = treeB.parent
     return cost
 
+  findBestTour: (points) ->
+    paths = []
+    console.log @permutationsTwoByTwo points
+
+  permutationsTwoByTwo: (arr) ->
+    if arr.length is 0
+      return []
+    results = []
+    for value in arr[1..]
+      res = [arr[0], value]
+      results.push res
+
+    return results.concat @permutationsTwoByTwo arr[1..]
+
 
 ## export
 module.exports = Agent

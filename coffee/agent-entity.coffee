@@ -11,6 +11,8 @@ class AgentEntity extends Entity
 
   findBestPath: (args...) -> @agent.findBestPath(args[0], args[1])
 
+  findBestTour: (args) -> @agent.findBestTour(args)
+
   planPath: (args...) ->
     @setPosition(args[0])
     @path = @findBestPath args...

@@ -12,10 +12,19 @@ class Path
     string = string + point.toString() + " " for point in @points
     return string
 
+  key: ->
+    firstPoint = @points[0]
+    lastPoint = @points[@points.length - 1]
+    return firstPoint.toString() + lastPoint.toString()
+
   nextPoint: (point) ->
     for pathPoint, i in @points
       if pathPoint.equals point
         return @points[i+1] ? @points[i]
+
+  ## static
+  @keyFromPoints: (pointA, pointB) ->
+    return new Path([pointA, pointB]).key()
 
 ## export
 module.exports = Path
