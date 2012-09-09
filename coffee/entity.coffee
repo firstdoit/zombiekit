@@ -1,7 +1,13 @@
 class Entity
   constructor: (@world, @position) ->
+    @shape = {}
+    @setPosition(@position)
 
-  shape: ->
+  setPosition: (position) ->
+    @position = position if position
+    if @shape
+      @shape.x = @position.x * @world.tileSize
+      @shape.y = @position.y * @world.tileSize
 
 ## export
 module.exports = Entity

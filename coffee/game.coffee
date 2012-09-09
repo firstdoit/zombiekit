@@ -12,7 +12,7 @@ class Game
     console.log @agent.findBestPath(@world.map.findPoint({x:1,y:1}), @world.map.findPoint({x:5,y:2})).toString()
     console.log @agent.findBestPath(@world.map.findPoint({x:1,y:1}), @world.map.findPoint({x:4,y:4})).toString()###
 
-    @agent.planPath(@world.map.findPoint({x:1,y:1}), @world.map.findPoint({x:3,y:5}))
+    @agent.planPath(@world.map.findPoint({x:4,y:1}), @world.map.findPoint({x:3,y:5}))
 
 ## export
 module.exports = Game

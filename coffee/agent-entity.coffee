@@ -7,13 +7,12 @@ class AgentEntity extends Entity
     super
     @agent = new Agent(@world.map)
     @shape = @createShape()
-    @shape.x = @position.x * @world.tileSize
-    @shape.y = @position.y * @world.tileSize
     @shape.onTick = -> console.log 'shape tick'
 
   findBestPath: (args...) -> @agent.findBestPath(args[0], args[1])
 
   planPath: (args...) ->
+    @setPosition(args[0])
     @path = @findBestPath args...
 
   createShape: ->
