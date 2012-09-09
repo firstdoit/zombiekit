@@ -26,6 +26,9 @@ class World
     createjs.Ticker.setFPS(10)
     createjs.Ticker.addListener(@)
 
+  point: (args...) ->
+    @map.findPoint(args...)
+
   addEntity: (entity) ->
     @entities.push entity
     @stage.addChild entity.shape

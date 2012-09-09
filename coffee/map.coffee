@@ -7,7 +7,12 @@ class Map
 
   layer: (name) -> return (layer for layer in @data.layers when layer.name is name)[0] ? @data.layers[0]
 
-  findPoint: (coords) ->
+  findPoint: (args...) ->
+    if args.length is 1
+      coords = args[0]
+    else
+      coords = {x:args[0], y:args[1]}
+
     ##Some invalid coordinates. Probably off a border.
     return undefined if coords.x < 1 or coords.y < 1 or coords.x > @data.width or coords.y > @layer().data.length / @layer().width
 

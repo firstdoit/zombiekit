@@ -23,8 +23,8 @@ class Path
         return @points[i+1] ? @points[i]
 
   ## static
-  @keyFromPoints: (pointA, pointB) ->
-    return new Path([pointA, pointB]).key()
+  @keyFromPoints: (twoPoints) ->
+    return new Path(twoPoints).key()
 
 ## export
 module.exports = Path
