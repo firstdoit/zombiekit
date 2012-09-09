@@ -12,5 +12,10 @@ class Path
     string = string + point.toString() + " " for point in @points
     return string
 
+  nextPoint: (point) ->
+    for pathPoint, i in @points
+      if pathPoint.equals point
+        return @points[i+1] ? @points[i]
+
 ## export
 module.exports = Path

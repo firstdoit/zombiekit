@@ -9,6 +9,7 @@ class World
     @stage = new createjs.Stage(@canvasElement)
     @map = MapFactory.getMap()
     @entities = []
+    @tileSize = 64
 
   init: ->
     canvas = document.createElement('canvas')
@@ -22,14 +23,18 @@ class World
         @stage.update()
       )
 
-    createjs.Ticker.setFPS(60)
-    createjs.Ticker.addListener(this)
+    createjs.Ticker.setFPS(10)
+    createjs.Ticker.addListener(@)
 
   addEntity: (entity) ->
     @entities.push entity
     @stage.addChild entity.shape
 
+  update: ->
+    entity.update() for entity in @entities
+
   tick: ->
+    @update()
     @stage.update()
 
 ## export
