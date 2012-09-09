@@ -37,5 +37,9 @@ class World
     @update()
     @stage.update()
 
+  pause: (value) ->
+    val = value ? true
+    createjs.Ticker.setPaused(val)
+
 ## export
 module.exports = World

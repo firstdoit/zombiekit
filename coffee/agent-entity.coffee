@@ -7,6 +7,9 @@ class AgentEntity extends Entity
     super
     @agent = new Agent(@world.map)
     @shape = @createShape()
+    @shape.x = @position.x * @world.tileSize
+    @shape.y = @position.y * @world.tileSize
+    @shape.onTick = -> console.log 'shape tick'
 
   findBestPath: (args...) -> @agent.findBestPath(args[0], args[1])
 
@@ -19,13 +22,15 @@ class AgentEntity extends Entity
     g.beginStroke(createjs.Graphics.getRGB(0,0,0,1))
     g.drawCircle(-@world.tileSize/2, -@world.tileSize/2, 30)
     circle = new createjs.Shape(g)
-    circle.x = 0
-    circle.y = 0
     return circle
 
   update: ->
     if @path
-      @position = @path.nextPoint(@position)
+      newPosition = @path.nextPoint(@position)
+      if newPosition.equals @position
+        @world.pause()
+        return
+      @position = newPosition
       @shape.x = @position.x * @world.tileSize
       @shape.y = @position.y * @world.tileSize
 
