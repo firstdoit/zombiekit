@@ -1,3 +1,4 @@
+Arboreal = require("../lib/arboreal")
 Map = require("./map")
 Path = require("./path")
 
