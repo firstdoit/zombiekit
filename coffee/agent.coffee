@@ -19,6 +19,8 @@ class Agent
 
   ## A* implementation
   findBestPath: (originPoint, goalPoint) ->
+    if originPoint.type isnt Map.road or goalPoint.type isnt Map.road
+      return undefined
     ## Initialize our current point
     currentPoint = originPoint
     currentPoint.visited = true;
@@ -86,20 +88,11 @@ class Agent
     permutations = @permutationsTwoByTwo points
     paths = {}
     for array in permutations
-      ##path = @findBestPath(array[0], array[1])
-      path = new Path(array)
+      path = @findBestPath(array[0], array[1])
       paths[path.key()] = path
-      reversePath = new Path(array).reverse()
+      reversePath = new Path(path.points).reverse()
       paths[reversePath.key()] = reversePath
     console.log paths
-
-    count = 0
-    for key, path of paths
-      console.log key
-      if count < 20
-        console.log @findBestPath(path.points[0], path.points[1])
-        count++
-
 
   permutationsTwoByTwo: (arr) ->
     if arr.length is 0
