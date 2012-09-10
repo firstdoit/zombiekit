@@ -89,14 +89,14 @@ class Agent
       ##path = @findBestPath(array[0], array[1])
       path = new Path(array)
       paths[path.key()] = path
-      path = new Path(array).reverse()
-      paths[path.key()] = path
+      reversePath = new Path(array).reverse()
+      paths[reversePath.key()] = reversePath
     console.log paths
 
     count = 0
     for key, path of paths
-      console.log key, path
-      if count < 3
+      console.log key
+      if count < 20
         console.log @findBestPath(path.points[0], path.points[1])
         count++
 

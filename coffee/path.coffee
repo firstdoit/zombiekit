@@ -1,7 +1,8 @@
 Point = require("./point")
 class Path
-  constructor: (@points) ->
-
+  constructor: (points) ->
+    ##clone the array instead of maintaining a referece to the parameter
+    @points = [].concat(points)
   cost: ->
     sum = 0
     sum = sum + point.cost for point in @points

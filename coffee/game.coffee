@@ -11,7 +11,7 @@ class Game
       @world.point(1,1),
       @world.point(5,3),
       @world.point(2,5),
-      @world.point(3,4),
+      @world.point(3,5),
       @world.point(1,1)
     ]
 
