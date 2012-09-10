@@ -14,9 +14,9 @@ class AgentEntity extends Entity
 
   findBestTour: (args) -> @agent.findBestTour(args)
 
-  planPath: (args...) ->
-    @setPosition(args[0])
-    @path = @findBestPath args...
+  setPath: (path) ->
+    @setPosition(path.points[0])
+    @path = path
 
   executePath: ->
     @followPath = true
@@ -32,6 +32,7 @@ class AgentEntity extends Entity
   update: ->
     if @followPath
       newPosition = @path.nextPoint(@position)
+      console.log newPosition
       if newPosition.equals @position
         @world.pause()
         return

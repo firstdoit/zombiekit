@@ -15,10 +15,11 @@ class Game
       @world.point(1,1)
     ]
 
-    @agent.planPath @world.point(1,1), @world.point(5,5)
+    path = @agent.findBestTour @world.pointsOfInterest
+    console.log path
+    @agent.setPath path
     @agent.executePath()
 
-    @agent.findBestTour @world.pointsOfInterest
 
 ## export
 module.exports = Game

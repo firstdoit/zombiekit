@@ -44,12 +44,12 @@ class Agent
 
       ## Initialize our best point in this round
       bestPoint = unvisitedPoints[0]
-      bestPointHeuristicValue = @heuristicValue(bestPoint, goalPoint, treeHead)
+      bestPointHeuristicValue = @heuristicValue bestPoint, goalPoint, treeHead
 
       ##Choose the best point to visit next from the rest of the unvisited points
       for point in unvisitedPoints[1..]
-        pointHeuristicValue = @heuristicValue(point, goalPoint, treeHead)
-        if (pointHeuristicValue < bestPointHeuristicValue)
+        pointHeuristicValue = @heuristicValue point, goalPoint, treeHead
+        if pointHeuristicValue < bestPointHeuristicValue
           bestPoint = point
           bestPointHeuristicValue = pointHeuristicValue
 
@@ -93,6 +93,12 @@ class Agent
       reversePath = new Path(path.points).reverse()
       paths[reversePath.key()] = reversePath
     console.log paths
+    console.log points
+    ## Ache o tour direto
+    path = paths[new Path(points[0..1]).key()]
+    path.addPath paths[new Path(points[1..2]).key()]
+    path.addPath paths[new Path(points[2..3]).key()]
+    return path
 
   permutationsTwoByTwo: (arr) ->
     if arr.length is 0
