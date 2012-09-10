@@ -10,8 +10,8 @@ class Game
     @world.pointsOfInterest = [
       @world.point(1,1),
       @world.point(5,3),
-      @world.point(2,5),
-      @world.point(3,5),
+      @world.point(2,4),
+      @world.point(4,5),
       @world.point(1,1)
     ]
 

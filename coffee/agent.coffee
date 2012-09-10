@@ -98,6 +98,7 @@ class Agent
     path = paths[new Path(points[0..1]).key()]
     path.addPath paths[new Path(points[1..2]).key()]
     path.addPath paths[new Path(points[2..3]).key()]
+    path.addPath paths[new Path(points[3..4]).key()]
     return path
 
   permutationsTwoByTwo: (arr) ->
