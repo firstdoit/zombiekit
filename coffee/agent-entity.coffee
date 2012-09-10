@@ -8,6 +8,7 @@ class AgentEntity extends Entity
     @agent = new Agent(@world.map)
     @shape = @createShape()
     @shape.onTick = -> console.log 'shape tick'
+    @followPath = false
 
   findBestPath: (args...) -> @agent.findBestPath(args[0], args[1])
 
@@ -16,6 +17,9 @@ class AgentEntity extends Entity
   planPath: (args...) ->
     @setPosition(args[0])
     @path = @findBestPath args...
+
+  executePath: ->
+    @followPath = true
 
   createShape: ->
     g = new createjs.Graphics()
@@ -26,7 +30,7 @@ class AgentEntity extends Entity
     return circle
 
   update: ->
-    if @path
+    if @followPath
       newPosition = @path.nextPoint(@position)
       if newPosition.equals @position
         @world.pause()

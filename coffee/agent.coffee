@@ -83,14 +83,31 @@ class Agent
     return cost
 
   findBestTour: (points) ->
-    paths = []
-    console.log @permutationsTwoByTwo points
+    permutations = @permutationsTwoByTwo points
+    paths = {}
+    for array in permutations
+      ##path = @findBestPath(array[0], array[1])
+      path = new Path(array)
+      paths[path.key()] = path
+      path = new Path(array).reverse()
+      paths[path.key()] = path
+    console.log paths
+
+    count = 0
+    for key, path of paths
+      console.log key, path
+      if count < 3
+        console.log @findBestPath(path.points[0], path.points[1])
+        count++
+
 
   permutationsTwoByTwo: (arr) ->
     if arr.length is 0
       return []
     results = []
     for value in arr[1..]
+      if (arr[0].equals value)
+        continue
       res = [arr[0], value]
       results.push res
 

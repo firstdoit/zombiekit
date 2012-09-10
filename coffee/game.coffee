@@ -16,6 +16,7 @@ class Game
     ]
 
     @agent.planPath @world.point(1,1), @world.point(5,5)
+    @agent.executePath()
 
     @agent.findBestTour @world.pointsOfInterest
 

@@ -22,6 +22,10 @@ class Path
       if pathPoint.equals point
         return @points[i+1] ? @points[i]
 
+  reverse: ->
+    @points = @points.reverse()
+    return @
+
   ## static
   @keyFromPoints: (twoPoints) ->
     return new Path(twoPoints).key()
