@@ -7,7 +7,8 @@ class AgentEntity extends Entity
     super
     @agent = new Agent(@world.map)
     @shape = @createShape()
-    @shape.onTick = -> console.log 'shape tick'
+    @shape.onTick = ->
+      ##console.log 'shape tick'
     @followPath = false
 
   findBestPath: (args...) -> @agent.findBestPath(args[0], args[1])
@@ -32,7 +33,6 @@ class AgentEntity extends Entity
   update: ->
     if @followPath
       newPosition = @path.nextPoint(@position)
-      console.log newPosition
       if newPosition.equals @position
         @world.pause()
         return

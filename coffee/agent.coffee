@@ -95,11 +95,11 @@ class Agent
     console.log paths
     console.log points
     ## Ache o tour direto
-    path = paths[new Path(points[0..1]).key()]
-    path.addPath paths[new Path(points[1..2]).key()]
-    path.addPath paths[new Path(points[2..3]).key()]
-    path.addPath paths[new Path(points[3..4]).key()]
-    return path
+    tour = paths[new Path(points[0..1]).key()]
+    tour.addPath paths[new Path(points[1..2]).key()]
+    tour.addPath paths[new Path(points[2..3]).key()]
+    tour.addPath paths[new Path(points[3..4]).key()]
+    return tour
 
   permutationsTwoByTwo: (arr) ->
     if arr.length is 0
