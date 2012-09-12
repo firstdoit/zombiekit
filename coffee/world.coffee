@@ -9,22 +9,21 @@ class World
     @stage = new createjs.Stage(@canvasElement)
     @map = MapFactory.getMap()
     @entities = []
-    @tileSize = 64
+    @tileSize = @map.data.tileheight
 
   init: ->
     canvas = document.createElement('canvas')
-    $(canvas).attr('width', 320)
-    $(canvas).attr('height', 320)
+    $(canvas).attr('width', 640)
+    $(canvas).attr('height', 640)
     ctx = canvas.getContext("2d")
-    TiledMapRenderer.renderMapToContext(@map, ctx)
-      .then( (value) =>
-        backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0,0,320,320))
-        @stage.addChildAt(backgroundShape, 0)
-        @stage.update()
-      )
-
-    createjs.Ticker.setFPS(10)
-    createjs.Ticker.addListener(@)
+    TiledMapRenderer.renderMapToContext(@map, ctx).then( (value) =>
+      createjs.Ticker.setFPS(10)
+      createjs.Ticker.addListener(@)
+      console.log 'Rendered background'
+      backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0,0,640,640))
+      @stage.addChildAt(backgroundShape, 0)
+      @stage.update()
+    )
 
   point: (args...) ->
     @map.findPoint(args...)
@@ -32,6 +31,7 @@ class World
   addEntity: (entity) ->
     @entities.push entity
     @stage.addChild entity.shape
+    @stage.addChild entity.debugShape if entity.debugShape
 
   update: ->
     entity.update() for entity in @entities

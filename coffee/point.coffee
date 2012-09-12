@@ -1,5 +1,5 @@
 class Point
-  constructor: (@x, @y, @cost, @type) ->
+  constructor: (@x, @y, @cost, @type, @collidable, @tileIndex) ->
     @cost = @cost ? 1
     @visited = false
     ## If this point belongs to a path, the index in the path.

@@ -12,10 +12,11 @@ class TileMapRenderer
       tileWidth = map.data.tilewidth
       tileHeight = map.data.tileheight
       width = map.data.width
-      for y in [1..5]
-        for x in [1..5]
+      height = map.data.height
+      for y in [1..width]
+        for x in [1..height]
           point = map.findPoint({x:x, y:y})
-          coords = TileMapRenderer.findCoordsForIndex(point.type, tileset.naturalWidth / tileWidth)
+          coords = TileMapRenderer.findCoordsForIndex(point.tileIndex, tileset.naturalWidth / tileWidth)
           sx = (coords.x-1)*tileWidth
           sy = (coords.y-1)*tileHeight
           dx = (x-1)*tileWidth

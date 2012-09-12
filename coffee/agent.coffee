@@ -1,5 +1,4 @@
 Arboreal = require("../lib/arboreal")
-Map = require("./map")
 Path = require("./path")
 
 class Agent
@@ -14,16 +13,16 @@ class Agent
     left = @map.findPoint({x:point.x-1, y:point.y})
     nonCollidablePoints = []
 
-    nonCollidablePoints.push ncpoint for ncpoint in [up, right, down, left] when ncpoint?.type is Map.road
+    nonCollidablePoints.push ncpoint for ncpoint in [up, right, down, left] when ncpoint?.collidable is false
     return nonCollidablePoints
 
   ## A* implementation
-  findBestPath: (originPoint, goalPoint) ->
-    if originPoint.type isnt Map.road or goalPoint.type isnt Map.road
+  findBestPath: (originPoint, goalPoint, drawDebug) ->
+    if originPoint.collidable is true or goalPoint.collidable is true
       return undefined
     ## Initialize our current point
     currentPoint = originPoint
-    currentPoint.visited = true;
+    currentPoint.visited = true
     ## Create two tree node variables - head and current
     treeHead = treeCurrentNode = new Arboreal(null, currentPoint)
     ## The array for the best route
@@ -31,6 +30,9 @@ class Agent
 
     ## While we haven't found the goal point
     while not currentPoint.equals goalPoint
+      ##if drawDebug
+      ##  drawDebug(currentPoint)
+
       ## For each navigable point, append it to the current tree node.
       for point in @nonCollidablePointsFromPoint currentPoint
         ## If it's the parent, mark it as visited
@@ -64,6 +66,11 @@ class Agent
     while treeCurrentNode
       bestRoute.push(treeCurrentNode?.data)
       treeCurrentNode = treeCurrentNode.parent
+
+    ## Clear the debug draw
+    ##if drawDebug
+    ##  drawDebug()
+
     bestRoute.reverse()
     return new Path(bestRoute)
 
@@ -84,21 +91,24 @@ class Agent
       treeB = treeB.parent
     return cost
 
-  findBestTour: (points) ->
+  findBestTour: (points, drawDebug) ->
+    console.log 'Finding best tour...'
+    console.log points
     permutations = @permutationsTwoByTwo points
     paths = {}
     for array in permutations
-      path = @findBestPath(array[0], array[1])
+      path = @findBestPath(array[0], array[1], drawDebug)
       paths[path.key()] = path
       reversePath = new Path(path.points).reverse()
       paths[reversePath.key()] = reversePath
     console.log paths
-    console.log points
     ## Ache o tour direto
     tour = paths[new Path(points[0..1]).key()]
     tour.addPath paths[new Path(points[1..2]).key()]
     tour.addPath paths[new Path(points[2..3]).key()]
     tour.addPath paths[new Path(points[3..4]).key()]
+    tour.addPath paths[new Path(points[4..5]).key()]
+    console.log 'Best tour found.'
     return tour
 
   permutationsTwoByTwo: (arr) ->
