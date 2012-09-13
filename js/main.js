@@ -487,6 +487,132 @@ require.define("/projects/zombiekit/coffee/map-factory.coffee",function(require,
 
 });
 
+require.define("/projects/zombiekit/coffee/map.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Map, Point,
+    __slice = [].slice;
+
+  Point = require("./point");
+
+  Map = (function() {
+
+    Map.costsInMin = {
+      1: 3,
+      2: 8,
+      3: 14,
+      4: 20,
+      5: 30
+    };
+
+    function Map(data) {
+      this.data = data;
+    }
+
+    Map.prototype.layer = function(name) {
+      var layer, _ref;
+      return (_ref = ((function() {
+        var _i, _len, _ref1, _results;
+        _ref1 = this.data.layers;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          layer = _ref1[_i];
+          if (layer.name === name) {
+            _results.push(layer);
+          }
+        }
+        return _results;
+      }).call(this))[0]) != null ? _ref : this.data.layers[0];
+    };
+
+    Map.prototype.getTypeProperty = function(type) {
+      var _ref;
+      return (_ref = this.data.tilesets[0].tileproperties[type - 1]) != null ? _ref['type'] : void 0;
+    };
+
+    Map.prototype.getCollidableProperty = function(index) {
+      var collidable, _ref;
+      collidable = (_ref = this.data.tilesets[0].tileproperties[index - 1]) != null ? _ref['collidable'] : void 0;
+      if (collidable && collidable === "0") {
+        return false;
+      } else {
+        return true;
+      }
+    };
+
+    Map.prototype.getCostForIndex = function(index) {
+      var _ref;
+      return (_ref = Map.costsInMin[this.layer('cost').data[index]]) != null ? _ref : 0;
+    };
+
+    Map.prototype.findPoint = function() {
+      var args, collidable, coords, cost, index, tileIndex, type;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (args.length === 1) {
+        coords = args[0];
+      } else {
+        coords = {
+          x: args[0],
+          y: args[1]
+        };
+      }
+      if (coords.x < 1 || coords.y < 1 || coords.x > this.data.width || coords.y > this.layer().data.length / this.layer().width) {
+        return void 0;
+      }
+      index = ((coords.y - 1) * this.data.width + coords.x) - 1;
+      tileIndex = this.layer('graphic').data[index];
+      cost = this.getCostForIndex(index);
+      type = this.getTypeProperty(tileIndex);
+      collidable = this.getCollidableProperty(tileIndex);
+      return new Point(coords.x, coords.y, cost, type, collidable, tileIndex);
+    };
+
+    return Map;
+
+  })();
+
+  module.exports = Map;
+
+}).call(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/point.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Point;
+
+  Point = (function() {
+
+    function Point(x, y, cost, type, collidable, tileIndex) {
+      var _ref;
+      this.x = x;
+      this.y = y;
+      this.cost = cost;
+      this.type = type;
+      this.collidable = collidable;
+      this.tileIndex = tileIndex;
+      this.cost = (_ref = this.cost) != null ? _ref : 1;
+      this.visited = false;
+      this.pathIndex = void 0;
+    }
+
+    Point.prototype.equals = function(point) {
+      var result;
+      result = (point.x === this.x) && (point.y === this.y);
+      return result;
+    };
+
+    Point.prototype.toString = function() {
+      return "(" + this.x + "," + this.y + ")";
+    };
+
+    return Point;
+
+  })();
+
+  module.exports = Point;
+
+}).call(this);
+
+});
+
 require.define("/projects/zombiekit/lib/arboreal.js",function(require,module,exports,__dirname,__filename,process){!function () {
   function include (array, item) {
     return array.indexOf(item) > -1;
@@ -735,6 +861,159 @@ require.define("/projects/zombiekit/lib/arboreal.js",function(require,module,exp
   }
 
 }(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/path.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Path, Point;
+
+  Point = require("./point");
+
+  Path = (function() {
+
+    function Path(points) {
+      this.points = [].concat(points);
+      this.resetIndexes();
+    }
+
+    Path.prototype.resetIndexes = function() {
+      var i, point, _i, _len, _ref, _results;
+      _ref = this.points;
+      _results = [];
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        point = _ref[i];
+        _results.push(point.pathIndex = i);
+      }
+      return _results;
+    };
+
+    Path.prototype.cost = function() {
+      var point, sum, _i, _len, _ref;
+      sum = 0;
+      _ref = this.points;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        sum = sum + point.cost;
+      }
+      return sum;
+    };
+
+    Path.prototype.toString = function() {
+      var point, string, _i, _len, _ref;
+      string = "";
+      _ref = this.points;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        string = string + point.toString() + " ";
+      }
+      return string;
+    };
+
+    Path.prototype.key = function() {
+      var firstPoint, lastPoint;
+      firstPoint = this.points[0];
+      lastPoint = this.points[this.points.length - 1];
+      return firstPoint.toString() + lastPoint.toString();
+    };
+
+    Path.prototype.nextPoint = function(point) {
+      var _ref;
+      return (_ref = this.points[point.pathIndex + 1]) != null ? _ref : point;
+    };
+
+    Path.prototype.reverse = function() {
+      this.points = this.points.reverse();
+      return this;
+    };
+
+    Path.prototype.addPath = function(path) {
+      var lastPoint;
+      lastPoint = this.points[this.points.length - 1];
+      if (lastPoint && !lastPoint.equals(path.points[0])) {
+        return;
+      }
+      this.points = this.points.concat(path.points.slice(1));
+      return this.resetIndexes();
+    };
+
+    Path.prototype.cost = function() {
+      var point, sum, _i, _len, _ref;
+      sum = 0;
+      _ref = this.points;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        sum += point.cost;
+      }
+      return sum;
+    };
+
+    Path.keyFromPoints = function(twoPoints) {
+      return new Path(twoPoints).key();
+    };
+
+    return Path;
+
+  })();
+
+  module.exports = Path;
+
+}).call(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/tiled-map-renderer.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Q, TileMapRenderer;
+
+  Q = require("q");
+
+  TileMapRenderer = (function() {
+
+    function TileMapRenderer() {}
+
+    TileMapRenderer.findCoordsForIndex = function(index, width) {
+      return {
+        x: ((index - 1) % width) + 1,
+        y: Math.ceil(index / width)
+      };
+    };
+
+    TileMapRenderer.renderMapToContext = function(map, context) {
+      var deferred, tileset;
+      tileset = new Image();
+      deferred = Q.defer();
+      tileset.onload = function() {
+        var coords, dx, dy, height, point, sx, sy, tileHeight, tileWidth, width, x, y, _i, _j;
+        tileWidth = map.data.tilewidth;
+        tileHeight = map.data.tileheight;
+        width = map.data.width;
+        height = map.data.height;
+        for (y = _i = 1; 1 <= width ? _i <= width : _i >= width; y = 1 <= width ? ++_i : --_i) {
+          for (x = _j = 1; 1 <= height ? _j <= height : _j >= height; x = 1 <= height ? ++_j : --_j) {
+            point = map.findPoint({
+              x: x,
+              y: y
+            });
+            coords = TileMapRenderer.findCoordsForIndex(point.tileIndex, tileset.naturalWidth / tileWidth);
+            sx = (coords.x - 1) * tileWidth;
+            sy = (coords.y - 1) * tileHeight;
+            dx = (x - 1) * tileWidth;
+            dy = (y - 1) * tileHeight;
+            context.drawImage(tileset, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
+          }
+        }
+        return deferred.resolve(context);
+      };
+      tileset.src = 'img/' + map.data.tilesets[0].image;
+      return deferred.promise;
+    };
+
+    return TileMapRenderer;
+
+  })();
+
+  module.exports = TileMapRenderer;
+
+}).call(this);
 
 });
 
@@ -3632,6 +3911,120 @@ window.Zepto = Zepto
 
 });
 
+require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Agent, AgentEntity, Entity, Point,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Entity = require("./entity");
+
+  Agent = require("./agent");
+
+  Point = require("./point");
+
+  AgentEntity = (function(_super) {
+
+    __extends(AgentEntity, _super);
+
+    function AgentEntity() {
+      this.drawDebug = __bind(this.drawDebug, this);
+      AgentEntity.__super__.constructor.apply(this, arguments);
+      this.agent = new Agent(this.world.map);
+      this.shape = this.createShape();
+      this.shape.onTick = function() {};
+      this.followPath = false;
+      this.debugShape = new createjs.Shape(new createjs.Graphics());
+    }
+
+    AgentEntity.prototype.drawPoint = function(point, color) {
+      return this.debugShape.graphics.setStrokeStyle(3).beginStroke(color).drawCircle((-this.world.tileSize / 2) + (point.x * this.world.tileSize), (-this.world.tileSize / 2) + (point.y * this.world.tileSize), 12);
+    };
+
+    AgentEntity.prototype.drawDebug = function(options) {
+      var nonCollidablePoints, point, unvisitedPoints, upoint, visitedPoints, _i, _j, _k, _len, _len1, _len2;
+      if (options) {
+        if (options.unvisitedPoints) {
+          unvisitedPoints = options.unvisitedPoints;
+          for (_i = 0, _len = unvisitedPoints.length; _i < _len; _i++) {
+            upoint = unvisitedPoints[_i];
+            this.drawPoint(upoint, createjs.Graphics.getRGB(0, 230, 0, 1));
+          }
+        }
+        if (options.visitedPoints) {
+          visitedPoints = options.visitedPoints;
+          for (_j = 0, _len1 = visitedPoints.length; _j < _len1; _j++) {
+            upoint = visitedPoints[_j];
+            this.drawPoint(upoint, createjs.Graphics.getRGB(230, 230, 0, 1));
+          }
+        }
+        if (options.nonCollidablePoints) {
+          nonCollidablePoints = options.nonCollidablePoints;
+          for (_k = 0, _len2 = nonCollidablePoints.length; _k < _len2; _k++) {
+            upoint = nonCollidablePoints[_k];
+            this.drawPoint(upoint, createjs.Graphics.getRGB(0, 0, 230, 1));
+          }
+        }
+        if (options.point) {
+          point = options.point;
+          this.drawPoint(point, createjs.Graphics.getRGB(230, 0, 0, 1));
+        }
+        this.world.stage.update();
+        return true;
+      } else {
+        this.debugShape.graphics.clear();
+        this.world.stage.update();
+        return false;
+      }
+    };
+
+    AgentEntity.prototype.findBestTour = function(args) {
+      return this.agent.findBestTour(args, game.debugMode ? this.drawDebug : void 0);
+    };
+
+    AgentEntity.prototype.setPath = function(path) {
+      this.setPosition(path.points[0]);
+      return this.path = path;
+    };
+
+    AgentEntity.prototype.executePath = function() {
+      return this.followPath = true;
+    };
+
+    AgentEntity.prototype.createShape = function() {
+      var circle, g;
+      g = new createjs.Graphics();
+      g.setStrokeStyle(5);
+      g.beginStroke(createjs.Graphics.getRGB(0, 0, 0, 1));
+      g.drawCircle(-this.world.tileSize / 2, -this.world.tileSize / 2, 15);
+      circle = new createjs.Shape(g);
+      return circle;
+    };
+
+    AgentEntity.prototype.update = function() {
+      var newPosition;
+      if (this.followPath) {
+        newPosition = this.path.nextPoint(this.position);
+        if (newPosition.equals(this.position)) {
+          this.world.pause();
+          return;
+        }
+        this.position = newPosition;
+        this.shape.x = this.position.x * this.world.tileSize;
+        return this.shape.y = this.position.y * this.world.tileSize;
+      }
+    };
+
+    return AgentEntity;
+
+  })(Entity);
+
+  module.exports = AgentEntity;
+
+}).call(this);
+
+});
+
 require.define("/projects/zombiekit/coffee/entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var Entity;
 
@@ -3654,158 +4047,13 @@ require.define("/projects/zombiekit/coffee/entity.coffee",function(require,modul
       }
     };
 
+    Entity.prototype.destroy = function() {};
+
     return Entity;
 
   })();
 
   module.exports = Entity;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/map.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Map, Point,
-    __slice = [].slice;
-
-  Point = require("./point");
-
-  Map = (function() {
-
-    Map.road = 109;
-
-    Map.nonCollidable = [502, 496, 497, 445, 188, 508, 442, 443];
-
-    Map.tiles = {
-      food: 188,
-      water: 442,
-      guns: 443,
-      home: 445,
-      ammo: 508
-    };
-
-    function Map(data) {
-      this.data = data;
-    }
-
-    Map.prototype.layer = function(name) {
-      var layer, _ref;
-      return (_ref = ((function() {
-        var _i, _len, _ref1, _results;
-        _ref1 = this.data.layers;
-        _results = [];
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          layer = _ref1[_i];
-          if (layer.name === name) {
-            _results.push(layer);
-          }
-        }
-        return _results;
-      }).call(this))[0]) != null ? _ref : this.data.layers[0];
-    };
-
-    Map.prototype.getTypeForIndex = function(index) {
-      var _ref;
-      return (_ref = this.data.tilesets[0].tileproperties[index - 1]) != null ? _ref['type'] : void 0;
-    };
-
-    Map.prototype.getCollidableForIndex = function(index) {
-      var collidable, _ref;
-      collidable = (_ref = this.data.tilesets[0].tileproperties[index - 1]) != null ? _ref['collidable'] : void 0;
-      if (collidable && collidable === "0") {
-        return false;
-      } else {
-        return true;
-      }
-    };
-
-    Map.prototype.getCostForIndex = function(index) {
-      return this.layer('cost').data[index];
-    };
-
-    Map.prototype.findPoint = function() {
-      var args, collidable, coords, cost, index, tileIndex, type;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (args.length === 1) {
-        coords = args[0];
-      } else {
-        coords = {
-          x: args[0],
-          y: args[1]
-        };
-      }
-      if (coords.x < 1 || coords.y < 1 || coords.x > this.data.width || coords.y > this.layer().data.length / this.layer().width) {
-        return void 0;
-      }
-      index = ((coords.y - 1) * this.data.width + coords.x) - 1;
-      tileIndex = this.layer('graphic').data[index];
-      cost = this.getCostForIndex(tileIndex);
-      type = this.getTypeForIndex(tileIndex);
-      collidable = this.getCollidableForIndex(tileIndex);
-      return new Point(coords.x, coords.y, cost, type, collidable, tileIndex);
-    };
-
-    return Map;
-
-  })();
-
-  module.exports = Map;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/tiled-map-renderer.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Q, TileMapRenderer;
-
-  Q = require("q");
-
-  TileMapRenderer = (function() {
-
-    function TileMapRenderer() {}
-
-    TileMapRenderer.findCoordsForIndex = function(index, width) {
-      return {
-        x: ((index - 1) % width) + 1,
-        y: Math.ceil(index / width)
-      };
-    };
-
-    TileMapRenderer.renderMapToContext = function(map, context) {
-      var deferred, tileset;
-      tileset = new Image();
-      deferred = Q.defer();
-      tileset.onload = function() {
-        var coords, dx, dy, height, point, sx, sy, tileHeight, tileWidth, width, x, y, _i, _j;
-        tileWidth = map.data.tilewidth;
-        tileHeight = map.data.tileheight;
-        width = map.data.width;
-        height = map.data.height;
-        for (y = _i = 1; 1 <= width ? _i <= width : _i >= width; y = 1 <= width ? ++_i : --_i) {
-          for (x = _j = 1; 1 <= height ? _j <= height : _j >= height; x = 1 <= height ? ++_j : --_j) {
-            point = map.findPoint({
-              x: x,
-              y: y
-            });
-            coords = TileMapRenderer.findCoordsForIndex(point.tileIndex, tileset.naturalWidth / tileWidth);
-            sx = (coords.x - 1) * tileWidth;
-            sy = (coords.y - 1) * tileHeight;
-            dx = (x - 1) * tileWidth;
-            dy = (y - 1) * tileHeight;
-            context.drawImage(tileset, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
-          }
-        }
-        return deferred.resolve(context);
-      };
-      tileset.src = 'img/' + map.data.tilesets[0].image;
-      return deferred.promise;
-    };
-
-    return TileMapRenderer;
-
-  })();
-
-  module.exports = TileMapRenderer;
 
 }).call(this);
 
@@ -3844,7 +4092,7 @@ require.define("/projects/zombiekit/coffee/world.coffee",function(require,module
       ctx = canvas.getContext("2d");
       return TiledMapRenderer.renderMapToContext(this.map, ctx).then((function(value) {
         var backgroundShape;
-        createjs.Ticker.setFPS(10);
+        createjs.Ticker.setFPS(World.FPS);
         createjs.Ticker.addListener(_this);
         console.log('Rendered background');
         backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0, 0, 640, 640));
@@ -3891,97 +4139,28 @@ require.define("/projects/zombiekit/coffee/world.coffee",function(require,module
       return createjs.Ticker.setPaused(val);
     };
 
+    World.prototype.reset = function() {
+      var entity, _i, _len, _ref;
+      _ref = this.entities;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        entity = _ref[_i];
+        this.stage.removeChild(entity.shape);
+        if (entity.debugShape) {
+          this.stage.removeChild(entity.debugShape);
+        }
+        entity.destroy();
+      }
+      this.entities = [];
+      return this.pause(false);
+    };
+
+    World.FPS = 15;
+
     return World;
 
   })();
 
   module.exports = World;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/path.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Path, Point;
-
-  Point = require("./point");
-
-  Path = (function() {
-
-    function Path(points) {
-      this.points = [].concat(points);
-      this.resetIndexes();
-    }
-
-    Path.prototype.resetIndexes = function() {
-      var i, point, _i, _len, _ref, _results;
-      _ref = this.points;
-      _results = [];
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        point = _ref[i];
-        _results.push(point.pathIndex = i);
-      }
-      return _results;
-    };
-
-    Path.prototype.cost = function() {
-      var point, sum, _i, _len, _ref;
-      sum = 0;
-      _ref = this.points;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        point = _ref[_i];
-        sum = sum + point.cost;
-      }
-      return sum;
-    };
-
-    Path.prototype.toString = function() {
-      var point, string, _i, _len, _ref;
-      string = "";
-      _ref = this.points;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        point = _ref[_i];
-        string = string + point.toString() + " ";
-      }
-      return string;
-    };
-
-    Path.prototype.key = function() {
-      var firstPoint, lastPoint;
-      firstPoint = this.points[0];
-      lastPoint = this.points[this.points.length - 1];
-      return firstPoint.toString() + lastPoint.toString();
-    };
-
-    Path.prototype.nextPoint = function(point) {
-      var _ref;
-      return (_ref = this.points[point.pathIndex + 1]) != null ? _ref : point;
-    };
-
-    Path.prototype.reverse = function() {
-      this.points = this.points.reverse();
-      return this;
-    };
-
-    Path.prototype.addPath = function(path) {
-      var lastPoint;
-      lastPoint = this.points[this.points.length - 1];
-      if (lastPoint && !lastPoint.equals(path.points[0])) {
-        return;
-      }
-      this.points = this.points.concat(path.points.slice(1));
-      return this.resetIndexes();
-    };
-
-    Path.keyFromPoints = function(twoPoints) {
-      return new Path(twoPoints).key();
-    };
-
-    return Path;
-
-  })();
-
-  module.exports = Path;
 
 }).call(this);
 
@@ -3999,166 +4178,32 @@ require.define("/projects/zombiekit/coffee/game.coffee",function(require,module,
     function Game() {
       var _this = this;
       this.world = new World($('#canvas')[0]);
-      this.world.init().then((function(value) {
-        var path;
-        _this.agent = new AgentEntity(_this.world, _this.world.point({
-          x: 1,
-          y: 1
-        }));
-        _this.world.addEntity(_this.agent);
-        /*@world.pointsOfInterest = [
-          @world.point(3, 3),
-          @world.point(7, 4),
-          @world.point(18, 6),
-          @world.point(8, 17),
-          @world.point(19, 17),
-          @world.point(3, 3)
-        ]
-        */
-
-        _this.world.pointsOfInterest = [_this.world.point(3, 3), _this.world.point(8, 17)];
-        path = _this.agent.findBestTour(_this.world.pointsOfInterest);
-        console.log(path);
-        _this.agent.setPath(path);
-        return _this.agent.executePath();
-      }), (function(error) {
+      this.world.init().then((function(value) {}), (function(error) {
         return console.log('Error initializing world', error);
       }));
     }
+
+    Game.prototype.run = function(debug) {
+      var path;
+      this.world.reset();
+      this.agent = new AgentEntity(this.world, this.world.point({
+        x: 1,
+        y: 1
+      }));
+      this.world.addEntity(this.agent);
+      this.debugMode = debug;
+      this.world.pointsOfInterest = [this.world.point(3, 3), this.world.point(7, 4), this.world.point(18, 6), this.world.point(19, 17), this.world.point(8, 17), this.world.point(3, 3)];
+      path = this.agent.findBestTour(this.world.pointsOfInterest);
+      console.log('Chosen path and cost: ', path, path.cost());
+      this.agent.setPath(path);
+      return this.agent.executePath();
+    };
 
     return Game;
 
   })();
 
   module.exports = Game;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Agent, AgentEntity, Entity, Point,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Entity = require("./entity");
-
-  Agent = require("./agent");
-
-  Point = require("./point");
-
-  AgentEntity = (function(_super) {
-
-    __extends(AgentEntity, _super);
-
-    function AgentEntity() {
-      this.drawDebug = __bind(this.drawDebug, this);
-      AgentEntity.__super__.constructor.apply(this, arguments);
-      this.agent = new Agent(this.world.map);
-      this.shape = this.createShape();
-      this.shape.onTick = function() {};
-      this.followPath = false;
-      this.debugShape = new createjs.Shape(new createjs.Graphics());
-    }
-
-    AgentEntity.prototype.drawDebug = function(point, unvisitedPoints) {
-      var upoint, _i, _len;
-      if (point) {
-        this.debugShape.graphics.setStrokeStyle(3).beginStroke(createjs.Graphics.getRGB(230, 0, 0, 1)).drawCircle((-this.world.tileSize / 2) + (point.x * this.world.tileSize), (-this.world.tileSize / 2) + (point.y * this.world.tileSize), 12);
-        if (unvisitedPoints) {
-          for (_i = 0, _len = unvisitedPoints.length; _i < _len; _i++) {
-            upoint = unvisitedPoints[_i];
-            this.debugShape.graphics.setStrokeStyle(3).beginStroke(createjs.Graphics.getRGB(0, 230, 0, 1)).drawCircle((-this.world.tileSize / 2) + (upoint.x * this.world.tileSize), (-this.world.tileSize / 2) + (upoint.y * this.world.tileSize), 12);
-          }
-        }
-        return this.world.stage.update();
-      } else {
-        this.debugShape.graphics.clear();
-        return this.world.stage.update();
-      }
-    };
-
-    AgentEntity.prototype.findBestTour = function(args) {
-      return this.agent.findBestTour(args, this.drawDebug);
-    };
-
-    AgentEntity.prototype.setPath = function(path) {
-      this.setPosition(path.points[0]);
-      return this.path = path;
-    };
-
-    AgentEntity.prototype.executePath = function() {
-      return this.followPath = true;
-    };
-
-    AgentEntity.prototype.createShape = function() {
-      var circle, g;
-      g = new createjs.Graphics();
-      g.setStrokeStyle(5);
-      g.beginStroke(createjs.Graphics.getRGB(0, 0, 0, 1));
-      g.drawCircle(-this.world.tileSize / 2, -this.world.tileSize / 2, 15);
-      circle = new createjs.Shape(g);
-      return circle;
-    };
-
-    AgentEntity.prototype.update = function() {
-      var newPosition;
-      if (this.followPath) {
-        newPosition = this.path.nextPoint(this.position);
-        if (newPosition.equals(this.position)) {
-          this.world.pause();
-          return;
-        }
-        this.position = newPosition;
-        this.shape.x = this.position.x * this.world.tileSize;
-        return this.shape.y = this.position.y * this.world.tileSize;
-      }
-    };
-
-    return AgentEntity;
-
-  })(Entity);
-
-  module.exports = AgentEntity;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/point.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Point;
-
-  Point = (function() {
-
-    function Point(x, y, cost, type, collidable, tileIndex) {
-      var _ref;
-      this.x = x;
-      this.y = y;
-      this.cost = cost;
-      this.type = type;
-      this.collidable = collidable;
-      this.tileIndex = tileIndex;
-      this.cost = (_ref = this.cost) != null ? _ref : 1;
-      this.visited = false;
-      this.pathIndex = void 0;
-    }
-
-    Point.prototype.equals = function(point) {
-      var result;
-      result = (point.x === this.x) && (point.y === this.y);
-      return result;
-    };
-
-    Point.prototype.toString = function() {
-      return "(" + this.x + "," + this.y + ")";
-    };
-
-    return Point;
-
-  })();
-
-  module.exports = Point;
 
 }).call(this);
 
@@ -4211,7 +4256,7 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
     };
 
     Agent.prototype.findBestPath = function(originPoint, goalPoint, drawDebug) {
-      var bestPoint, bestPointHeuristicValue, bestRoute, currentPoint, key, ncpoints, point, pointHeuristicValue, treeCurrentNode, treeHead, unvisitedPoints, unvisitedPointsMap, upoint, visitedPointsMap, _i, _j, _len, _len1, _ref;
+      var bestPoint, bestPointHeuristicValue, bestRoute, currentPoint, key, ncpoints, point, pointHeuristicValue, treeCurrentNode, treeHead, unvisitedPoints, unvisitedPointsMap, upoint, visitedPoints, visitedPointsMap, _i, _j, _len, _len1, _ref;
       if (originPoint.collidable === true || goalPoint.collidable === true) {
         return void 0;
       }
@@ -4219,18 +4264,24 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
       currentPoint.visited = true;
       treeHead = treeCurrentNode = new Arboreal(null, currentPoint);
       bestRoute = [];
-      if (drawDebug) {
-        drawDebug(currentPoint);
+      if (typeof drawDebug === "function") {
+        drawDebug({
+          point: currentPoint
+        });
       }
       while (!currentPoint.equals(goalPoint)) {
         ncpoints = this.nonCollidablePointsFromPoint(currentPoint);
+        if (typeof drawDebug === "function") {
+          drawDebug({
+            nonCollidablePoints: ncpoints
+          });
+        }
         for (_i = 0, _len = ncpoints.length; _i < _len; _i++) {
           point = ncpoints[_i];
           treeCurrentNode.appendChild(point);
         }
         unvisitedPointsMap = {};
         visitedPointsMap = {};
-        unvisitedPoints = [];
         treeHead.traverseDown(function(node) {
           var key;
           key = node.data.x + '.' + node.data.y;
@@ -4241,6 +4292,7 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
           }
           return true;
         });
+        unvisitedPoints = [];
         for (key in unvisitedPointsMap) {
           upoint = unvisitedPointsMap[key];
           if (!visitedPointsMap[key]) {
@@ -4248,7 +4300,15 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
           }
         }
         if (drawDebug) {
-          drawDebug(currentPoint, unvisitedPoints);
+          visitedPoints = [];
+          for (key in visitedPointsMap) {
+            upoint = visitedPointsMap[key];
+            visitedPoints.push(upoint);
+          }
+          drawDebug({
+            visitedPoints: visitedPoints,
+            unvisitedPoints: unvisitedPoints
+          });
         }
         bestPoint = unvisitedPoints[0];
         bestPointHeuristicValue = this.heuristicValue(bestPoint, goalPoint, treeHead);
@@ -4261,22 +4321,22 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
             bestPointHeuristicValue = pointHeuristicValue;
           }
         }
+        if (typeof drawDebug === "function") {
+          drawDebug({
+            point: bestPoint
+          });
+        }
         currentPoint = bestPoint;
         currentPoint.visited = true;
         treeCurrentNode = treeHead.find(function(node) {
           return node.data === currentPoint;
         });
-        if (drawDebug) {
-          drawDebug(currentPoint);
-          '';
-
-        }
       }
       while (treeCurrentNode) {
         bestRoute.push(treeCurrentNode != null ? treeCurrentNode.data : void 0);
         treeCurrentNode = treeCurrentNode.parent;
       }
-      if (drawDebug) {
+      if (typeof drawDebug === "function") {
         drawDebug();
       }
       bestRoute.reverse();
@@ -4284,7 +4344,7 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
     };
 
     Agent.prototype.heuristicValue = function(point, goalPoint, treeHead) {
-      return this.distanceToPoint(point, goalPoint) + this.pathCost(point, treeHead);
+      return (this.distanceToPoint(point, goalPoint) * 10) + this.pathCost(point, treeHead);
     };
 
     Agent.prototype.distanceToPoint = function(pointA, pointB) {
@@ -4365,7 +4425,13 @@ require.define("/projects/zombiekit/coffee/main.coffee",function(require,module,
   Game = require("./game");
 
   $(function() {
-    return window.game = new Game();
+    window.game = new Game();
+    $('#run').click(function() {
+      return game.run(false);
+    });
+    return $('#debug').click(function() {
+      return game.run(true);
+    });
   });
 
 }).call(this);
