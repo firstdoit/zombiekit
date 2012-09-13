@@ -34,7 +34,7 @@ class Path
   addPath: (path) ->
     lastPoint = @points[@points.length - 1]
     ## only add contiguous paths
-    if not lastPoint.equals path.points[0]
+    if lastPoint and not lastPoint.equals path.points[0]
       return
     @points = @points.concat path.points[1..]
     @resetIndexes()

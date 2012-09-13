@@ -8,18 +8,27 @@ class AgentEntity extends Entity
     @agent = new Agent(@world.map)
     @shape = @createShape()
     @shape.onTick = ->
-      console.log 'shape tick'
+      ##console.log 'shape tick'
     @followPath = false
     @debugShape = new createjs.Shape(new createjs.Graphics())
 
-  drawDebug: (point) ->
+  drawDebug: (point, unvisitedPoints) =>
     if point
-      console.log 'desenhando...'
+
       @debugShape
-        .graphics
-        .setStrokeStyle(3)
-        .beginStroke(createjs.Graphics.getRGB(230,0,0,1))
-        .drawCircle( (-@world.tileSize/2) + (point.x * @world.tileSize), (-@world.tileSize/2) + (point.y * @world.tileSize), 12 )
+      .graphics
+      .setStrokeStyle(3)
+      .beginStroke(createjs.Graphics.getRGB(230,0,0,1))
+      .drawCircle( (-@world.tileSize/2) + (point.x * @world.tileSize), (-@world.tileSize/2) + (point.y * @world.tileSize), 12 )
+
+      if unvisitedPoints
+        for upoint in unvisitedPoints
+          @debugShape
+          .graphics
+          .setStrokeStyle(3)
+          .beginStroke(createjs.Graphics.getRGB(0,230,0,1))
+          .drawCircle( (-@world.tileSize/2) + (upoint.x * @world.tileSize), (-@world.tileSize/2) + (upoint.y * @world.tileSize), 12 )
+
       @world.stage.update()
     else
       @debugShape.graphics.clear()

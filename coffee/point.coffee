@@ -6,7 +6,7 @@ class Point
     @pathIndex = undefined
 
   equals: (point) ->
-    result = point.x == @x and point.y == @y and point.cost == @cost and point.type == @type
+    result = (point.x is @x) and (point.y is @y)
     ##console.log('this:', @x, @y, 'new:', point.x, point.y, 'result:', result)
     return result
 

@@ -16,14 +16,18 @@ class World
     $(canvas).attr('width', 640)
     $(canvas).attr('height', 640)
     ctx = canvas.getContext("2d")
-    TiledMapRenderer.renderMapToContext(@map, ctx).then( (value) =>
-      createjs.Ticker.setFPS(10)
-      createjs.Ticker.addListener(@)
-      console.log 'Rendered background'
-      backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0,0,640,640))
-      @stage.addChildAt(backgroundShape, 0)
-      @stage.update()
-    )
+    TiledMapRenderer.renderMapToContext(@map, ctx).then(
+      ((value) =>
+        createjs.Ticker.setFPS(10)
+        createjs.Ticker.addListener(@)
+        console.log 'Rendered background'
+        backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0,0,640,640))
+        @stage.addChildAt(backgroundShape, 0)
+        @stage.update()
+      ),
+      ((error) =>
+        console.log 'Error rendering map:', error
+      ))
 
   point: (args...) ->
     @map.findPoint(args...)

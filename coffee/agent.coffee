@@ -27,22 +27,36 @@ class Agent
     treeHead = treeCurrentNode = new Arboreal(null, currentPoint)
     ## The array for the best route
     bestRoute = []
+    if drawDebug
+      drawDebug(currentPoint)
 
     ## While we haven't found the goal point
     while not currentPoint.equals goalPoint
-      ##if drawDebug
-      ##  drawDebug(currentPoint)
-
+      ncpoints = @nonCollidablePointsFromPoint currentPoint
       ## For each navigable point, append it to the current tree node.
-      for point in @nonCollidablePointsFromPoint currentPoint
-        ## If it's the parent, mark it as visited
-        if treeCurrentNode.parent?.data.equals point
-          point.visited = true
+      for point in ncpoints
         treeCurrentNode.appendChild point
 
       ##Fill the unvisitedPoints array
+      unvisitedPointsMap = {}
+      visitedPointsMap = {}
       unvisitedPoints = []
-      treeHead.traverseDown( (node) -> unvisitedPoints.push(node.data) if !node.data.visited )
+      treeHead.traverseDown( (node) ->
+        key = node.data.x + '.' + node.data.y
+        if node.data.visited
+          visitedPointsMap[key] = node.data
+        else
+          unvisitedPointsMap[key] = node.data
+        return true
+      )
+
+      for key, upoint of unvisitedPointsMap
+        if not visitedPointsMap[key]
+          unvisitedPoints.push(upoint)
+
+      if drawDebug
+        drawDebug(currentPoint, unvisitedPoints)
+        ##console.log 'current point:', currentPoint
 
       ## Initialize our best point in this round
       bestPoint = unvisitedPoints[0]
@@ -60,6 +74,11 @@ class Agent
       currentPoint.visited = true;
       ## Update the current tree node
       treeCurrentNode = treeHead.find( (node) -> node.data == currentPoint )
+
+      if drawDebug
+        drawDebug(currentPoint)
+        ''
+        ##console.log 'current point:', currentPoint
     ## end while
 
     ## Construct the best route from the bottom of the tree to the head
@@ -68,8 +87,8 @@ class Agent
       treeCurrentNode = treeCurrentNode.parent
 
     ## Clear the debug draw
-    ##if drawDebug
-    ##  drawDebug()
+    if drawDebug
+      drawDebug()
 
     bestRoute.reverse()
     return new Path(bestRoute)
@@ -103,11 +122,11 @@ class Agent
       paths[reversePath.key()] = reversePath
     console.log paths
     ## Ache o tour direto
-    tour = paths[new Path(points[0..1]).key()]
-    tour.addPath paths[new Path(points[1..2]).key()]
-    tour.addPath paths[new Path(points[2..3]).key()]
-    tour.addPath paths[new Path(points[3..4]).key()]
-    tour.addPath paths[new Path(points[4..5]).key()]
+    tour = new Path([])
+    for point, i in points
+      tpath = new Path(points[i..i+1])
+      key = tpath.key()
+      tour.addPath paths[key] if i < points.length - 1
     console.log 'Best tour found.'
     return tour
 
