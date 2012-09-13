@@ -48,5 +48,15 @@ class World
     val = value ? true
     createjs.Ticker.setPaused(val)
 
+  reset: ->
+    for entity in @entities
+      @stage.removeChild(entity.shape)
+      @stage.removeChild(entity.debugShape) if entity.debugShape
+      entity.destroy()
+
+    @entities = []
+    @pause(false)
+
+
 ## export
 module.exports = World

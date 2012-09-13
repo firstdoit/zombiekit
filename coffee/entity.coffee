@@ -9,5 +9,7 @@ class Entity
       @shape.x = @position.x * @world.tileSize
       @shape.y = @position.y * @world.tileSize
 
+  destroy: ->
+
 ## export
 module.exports = Entity

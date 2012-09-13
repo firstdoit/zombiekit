@@ -39,6 +39,11 @@ class Path
     @points = @points.concat path.points[1..]
     @resetIndexes()
 
+  cost: ->
+    sum = 0
+    sum += point.cost for point in @points
+    return sum
+
   ## static
   @keyFromPoints: (twoPoints) ->
     return new Path(twoPoints).key()

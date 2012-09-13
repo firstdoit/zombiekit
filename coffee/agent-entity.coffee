@@ -12,29 +12,42 @@ class AgentEntity extends Entity
     @followPath = false
     @debugShape = new createjs.Shape(new createjs.Graphics())
 
-  drawDebug: (point, unvisitedPoints) =>
-    if point
+  drawPoint: (point, color) ->
+    @debugShape
+    .graphics
+    .setStrokeStyle(3)
+    .beginStroke(color)
+    .drawCircle( (-@world.tileSize/2) + (point.x * @world.tileSize), (-@world.tileSize/2) + (point.y * @world.tileSize), 12 )
 
-      @debugShape
-      .graphics
-      .setStrokeStyle(3)
-      .beginStroke(createjs.Graphics.getRGB(230,0,0,1))
-      .drawCircle( (-@world.tileSize/2) + (point.x * @world.tileSize), (-@world.tileSize/2) + (point.y * @world.tileSize), 12 )
-
-      if unvisitedPoints
+  drawDebug: (options) =>
+    if options
+      if options.unvisitedPoints
+        unvisitedPoints = options.unvisitedPoints
         for upoint in unvisitedPoints
-          @debugShape
-          .graphics
-          .setStrokeStyle(3)
-          .beginStroke(createjs.Graphics.getRGB(0,230,0,1))
-          .drawCircle( (-@world.tileSize/2) + (upoint.x * @world.tileSize), (-@world.tileSize/2) + (upoint.y * @world.tileSize), 12 )
+          @drawPoint(upoint, createjs.Graphics.getRGB(0,230,0,1))
+
+      if options.visitedPoints
+        visitedPoints = options.visitedPoints
+        for upoint in visitedPoints
+          @drawPoint(upoint, createjs.Graphics.getRGB(230,230,0,1))
+
+      if options.nonCollidablePoints
+        nonCollidablePoints = options.nonCollidablePoints
+        for upoint in nonCollidablePoints
+          @drawPoint(upoint, createjs.Graphics.getRGB(0,0,230,1))
+
+      if options.point
+        point = options.point
+        @drawPoint(point, createjs.Graphics.getRGB(230,0,0,1))
 
       @world.stage.update()
+      return true
     else
       @debugShape.graphics.clear()
       @world.stage.update()
+      return false
 
-  findBestTour: (args) -> @agent.findBestTour(args, @drawDebug)
+  findBestTour: (args) -> @agent.findBestTour(args, if game.debugMode then @drawDebug else undefined)
 
   setPath: (path) ->
     @setPosition(path.points[0])

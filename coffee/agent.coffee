@@ -27,20 +27,21 @@ class Agent
     treeHead = treeCurrentNode = new Arboreal(null, currentPoint)
     ## The array for the best route
     bestRoute = []
-    if drawDebug
-      drawDebug(currentPoint)
+
+    drawDebug?({point:currentPoint})
 
     ## While we haven't found the goal point
     while not currentPoint.equals goalPoint
       ncpoints = @nonCollidablePointsFromPoint currentPoint
+      drawDebug?({nonCollidablePoints: ncpoints})
+
       ## For each navigable point, append it to the current tree node.
       for point in ncpoints
         treeCurrentNode.appendChild point
 
-      ##Fill the unvisitedPoints array
+      ## Fill the unvisitedPoints array
       unvisitedPointsMap = {}
       visitedPointsMap = {}
-      unvisitedPoints = []
       treeHead.traverseDown( (node) ->
         key = node.data.x + '.' + node.data.y
         if node.data.visited
@@ -50,13 +51,17 @@ class Agent
         return true
       )
 
+      ## Let's search only for the points that have never been visited
+      unvisitedPoints = []
       for key, upoint of unvisitedPointsMap
-        if not visitedPointsMap[key]
-          unvisitedPoints.push(upoint)
+        unvisitedPoints.push(upoint) if not visitedPointsMap[key]
 
+      ## For debugging purposes only
       if drawDebug
-        drawDebug(currentPoint, unvisitedPoints)
-        ##console.log 'current point:', currentPoint
+        visitedPoints = []
+        for key, upoint of visitedPointsMap
+          visitedPoints.push(upoint)
+        drawDebug({visitedPoints:visitedPoints, unvisitedPoints: unvisitedPoints})
 
       ## Initialize our best point in this round
       bestPoint = unvisitedPoints[0]
@@ -69,16 +74,14 @@ class Agent
           bestPoint = point
           bestPointHeuristicValue = pointHeuristicValue
 
+      drawDebug?({point:bestPoint})
+
       ## Lest visit the best point next
       currentPoint = bestPoint
       currentPoint.visited = true;
       ## Update the current tree node
       treeCurrentNode = treeHead.find( (node) -> node.data == currentPoint )
 
-      if drawDebug
-        drawDebug(currentPoint)
-        ''
-        ##console.log 'current point:', currentPoint
     ## end while
 
     ## Construct the best route from the bottom of the tree to the head
@@ -87,15 +90,14 @@ class Agent
       treeCurrentNode = treeCurrentNode.parent
 
     ## Clear the debug draw
-    if drawDebug
-      drawDebug()
+    drawDebug?()
 
     bestRoute.reverse()
     return new Path(bestRoute)
 
   ## Calculate the heuristic value of this point, given a goal point and a points tree
   heuristicValue: (point, goalPoint, treeHead) ->
-    return @distanceToPoint(point, goalPoint) + @pathCost(point, treeHead)
+    return ( @distanceToPoint(point, goalPoint) * 5 ) + @pathCost(point, treeHead)
 
   ## Calculate the Manhattan distance from pointA to pointB
   distanceToPoint: (pointA, pointB) ->
