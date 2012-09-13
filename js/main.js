@@ -399,50 +399,80 @@ require.define("/projects/zombiekit/coffee/map-factory.coffee",function(require,
     MapFactory.getMap = function() {
       var data;
       data = {
-        height: 5,
+        height: 20,
         layers: [
           {
-            data: [109, 109, 109, 109, 109, 130, 109, 105, 130, 109, 130, 109, 109, 109, 109, 130, 109, 130, 109, 106, 105, 109, 109, 109, 109],
-            height: 5,
-            name: "type",
-            opacity: 1,
-            type: "tilelayer",
-            visible: true,
-            width: 5,
-            x: 0,
-            y: 0
-          }, {
-            data: [4, 4, 4, 4, 4, -1, 4, -1, -1, 4, -1, 4, 4, 4, 4, -1, 4, -1, 4, -1, -1, 4, 4, 4, 4],
-            height: 5,
+            data: [1, 1, 3, 1, 1, 1, 5, 1, 1, 1, 5, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 2, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 1, 1, 5, 1, 1, 1, 3, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 5, 1, 1, 1, 1, 4, 1, 1, 3, 1, 1, 1, 1, 0, 0, 5, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1, 1, 3, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 2, 1, 5, 1, 1, 1, 1, 1, 3, 1, 2, 1, 0, 0, 4, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 4, 0, 0, 1, 5, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 4, 1, 0, 0, 1, 1, 4, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 0, 0, 1, 5, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 3, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 5, 0, 0, 1, 1, 0, 0, 1, 0, 0, 3, 0, 0, 0, 2, 0, 0, 4, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 5, 2, 1, 1, 1, 5, 1, 1, 3, 1, 2, 1, 1, 3, 1, 1, 1, 1, 2, 1, 1],
+            height: 20,
             name: "cost",
             opacity: 1,
             type: "tilelayer",
             visible: true,
-            width: 5,
+            width: 20,
+            x: 0,
+            y: 0
+          }, {
+            data: [502, 496, 496, 502, 496, 496, 496, 502, 496, 496, 496, 502, 496, 496, 502, 496, 496, 496, 496, 502, 497, 522, 522, 497, 522, 522, 522, 497, 522, 522, 522, 497, 522, 522, 497, 522, 522, 522, 522, 497, 497, 522, 445, 497, 522, 522, 522, 497, 522, 522, 522, 497, 522, 522, 497, 522, 522, 522, 522, 497, 497, 522, 522, 497, 522, 522, 508, 502, 496, 496, 496, 502, 522, 522, 497, 522, 522, 522, 522, 497, 497, 522, 522, 497, 522, 522, 522, 497, 522, 522, 522, 497, 522, 522, 502, 496, 496, 496, 496, 502, 497, 522, 522, 497, 522, 522, 522, 497, 522, 522, 522, 497, 522, 522, 497, 522, 522, 188, 522, 497, 502, 496, 496, 502, 496, 496, 496, 496, 496, 496, 496, 497, 522, 522, 497, 522, 522, 522, 522, 497, 497, 522, 522, 497, 522, 522, 497, 522, 522, 522, 522, 497, 496, 496, 496, 496, 496, 496, 496, 502, 497, 522, 522, 497, 522, 522, 497, 522, 522, 522, 522, 497, 522, 522, 522, 522, 497, 522, 522, 497, 497, 522, 522, 497, 522, 522, 497, 522, 522, 522, 522, 497, 522, 522, 522, 522, 497, 522, 522, 497, 502, 496, 496, 502, 496, 496, 496, 496, 496, 496, 496, 502, 496, 496, 496, 496, 502, 522, 522, 497, 497, 522, 522, 497, 522, 522, 522, 522, 522, 522, 522, 497, 522, 522, 522, 522, 497, 522, 522, 497, 497, 522, 522, 497, 522, 522, 522, 522, 522, 522, 522, 497, 522, 522, 522, 522, 497, 522, 522, 497, 497, 522, 522, 497, 522, 522, 522, 522, 522, 522, 522, 497, 522, 522, 522, 522, 497, 496, 496, 502, 497, 522, 522, 502, 496, 496, 502, 496, 496, 496, 496, 496, 496, 502, 496, 496, 497, 522, 522, 497, 497, 522, 522, 497, 522, 522, 497, 522, 522, 522, 497, 522, 522, 497, 522, 522, 497, 522, 522, 497, 502, 496, 496, 502, 522, 522, 497, 442, 522, 522, 497, 522, 522, 497, 522, 522, 497, 522, 443, 497, 497, 522, 522, 497, 522, 522, 497, 522, 522, 522, 497, 522, 522, 497, 522, 522, 497, 522, 522, 497, 497, 522, 522, 497, 522, 522, 497, 522, 522, 522, 497, 522, 522, 497, 522, 522, 497, 522, 522, 497, 502, 496, 496, 502, 496, 496, 502, 496, 496, 496, 502, 496, 496, 502, 496, 496, 502, 496, 496, 502],
+            height: 20,
+            name: "graphic",
+            opacity: 1,
+            type: "tilelayer",
+            visible: true,
+            width: 20,
             x: 0,
             y: 0
           }
         ],
         orientation: "orthogonal",
         properties: {},
-        tileheight: 64,
+        tileheight: 32,
         tilesets: [
           {
             firstgid: 1,
-            image: "Industrial-TileSheet.png",
-            imageheight: 1024,
-            imagewidth: 640,
+            image: "free_tileset_version_10.png",
+            imageheight: 1216,
+            imagewidth: 480,
             margin: 0,
-            name: "industrial",
-            properties: {},
+            name: "SilveiraNeto",
             spacing: 0,
-            tileheight: 64,
-            tilewidth: 64
+            tileheight: 32,
+            tileproperties: {
+              187: {
+                type: "food",
+                collidable: "0"
+              },
+              441: {
+                type: "water",
+                collidable: "0"
+              },
+              442: {
+                type: "guns",
+                collidable: "0"
+              },
+              444: {
+                type: "home",
+                collidable: "0"
+              },
+              495: {
+                collidable: "0"
+              },
+              496: {
+                collidable: "0"
+              },
+              501: {
+                collidable: "0"
+              },
+              507: {
+                type: "ammo",
+                collidable: "0"
+              }
+            },
+            tilewidth: 32
           }
         ],
-        tilewidth: 64,
+        tilewidth: 32,
         version: 1,
-        width: 5
+        width: 20
       };
       return new Map(data);
     };
@@ -457,86 +487,254 @@ require.define("/projects/zombiekit/coffee/map-factory.coffee",function(require,
 
 });
 
-require.define("/projects/zombiekit/coffee/map.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Map, Point;
+require.define("/projects/zombiekit/lib/arboreal.js",function(require,module,exports,__dirname,__filename,process){!function () {
+  function include (array, item) {
+    return array.indexOf(item) > -1;
+  }
 
-  Point = require("./point");
-
-  Map = (function() {
-
-    Map.road = 109;
-
-    function Map(data) {
-      this.data = data;
-    }
-
-    Map.prototype.layer = function(name) {
-      var layer, _ref;
-      return (_ref = ((function() {
-        var _i, _len, _ref1, _results;
-        _ref1 = this.data.layers;
-        _results = [];
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          layer = _ref1[_i];
-          if (layer.name === name) {
-            _results.push(layer);
-          }
-        }
-        return _results;
-      }).call(this))[0]) != null ? _ref : this.data.layers[0];
-    };
-
-    Map.prototype.findPoint = function(coords) {
-      var cost, index, type;
-      if (coords.x < 1 || coords.y < 1 || coords.x > this.data.width || coords.y > this.layer().data.length / this.layer().width) {
-        return void 0;
+  function _traverseDown (context, iterator) {
+    var doContinue = true;
+  
+    (function walkDown (node) {
+      var i, newContext;
+  
+      if (!doContinue) return;
+  
+      if (iterator(node) === false) {
+        //break the traversal loop if the iterator returns a falsy value
+        doContinue = false;
       }
-      index = ((coords.y - 1) * this.data.width + coords.x) - 1;
-      type = this.layer('type').data[index];
-      cost = this.layer('cost').data[index];
-      return new Point(coords.x, coords.y, cost, type);
-    };
+      else {
+        for (i = 0; i < node.children.length; i++) {
+          newContext = node.children[i];
+          walkDown(newContext);
+        }
+      }
+    })(context);
+  }
 
-    return Map;
 
-  })();
+  function _traverseUp (context, iterator) {
+    var i, node, doContinue;
 
-  module.exports = Map;
+    while (context) {
+      if ( iterator(context) === false ) return;
 
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/point.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Point;
-
-  Point = (function() {
-
-    function Point(x, y, cost, type) {
-      var _ref;
-      this.x = x;
-      this.y = y;
-      this.cost = cost;
-      this.type = type;
-      this.cost = (_ref = this.cost) != null ? _ref : 1;
-      this.visited = false;
+      for (i = 0; i < context.children.length; i++) {
+        node = context.children[i];
+        if ( iterator(node) === false ) return;
+      }
+      context = context.parent;
     }
+  }
+  
+  
+  function _traverse (context, iterator, callback) {
+    var visited = [],
+        callIterator = function (node) {
+          var id = node.id,
+              returned;
+  
+          if (! include(visited, id)) {
+            returned = iterator.call(node, node);
+            visited.push(id);
+  
+            if (returned === false) {
+              return returned;
+            }
+          }
+        },
+        i, node;
+  
+    callback(context, callIterator);
+  }
+  
 
-    Point.prototype.equals = function(point) {
-      return point.x === this.x && point.y === this.y && point.cost === this.cost && point.type === this.type;
-    };
+  function _removeChild (node) {
+    var parent = node.parent, 
+        child,
+        i;
+  
+    for (i = 0; i < parent.children.length; i++) {
+      child = parent.children[i];
+  
+      if (child === node) {
+        return parent.children.splice(i, 1).shift();
+      }
+    }
+  }
+  
+  function nodeId (parent, separator) {
+    separator = separator || '/';
+    if (parent) {
+      return [parent.id, parent.children.length ].join(separator);
+    }
+    else {
+      return '0';
+    }
+  }
+  
+  
+  function Arboreal (parent, data, id) {
+    this.depth = parent ? parent.depth + 1 : 0;
+    this.data = data || {};
+    this.parent = parent || null;
+    this.id = id || nodeId(parent);
+    this.children = [];
+  }
+  
+  Arboreal.parse = function (object, childrenAttr) {
+    var root, getNodeData = function (node) {
+          var attr, nodeData = {};
+          for (attr in node) {
+            if (attr !== childrenAttr) nodeData[attr] = node[attr];
+          }
+          return nodeData;
+        };
+  
+    (function walkDown(node, parent) {
+      var newNode, i;
+  
+      if (!parent) {
+        newNode = root = new Arboreal(null, getNodeData(node));
+      } else {
+        newNode = new Arboreal(parent, getNodeData(node));
+        parent.children.push(newNode);
+      }
+      if (childrenAttr in node) {
+        for (i = 0; i < node[childrenAttr].length; i++ ) {
+          walkDown(node[childrenAttr][i], newNode);
+        }
+      }
+    })(object);
+  
+    return root;
+  
+  };
+  
+  Arboreal.prototype.appendChild = function (data, id) {
+    var child = new Arboreal(this, data, id);
+    this.children.push(child);
+    return this;
+  };
+  
+  Arboreal.prototype.removeChild = function (arg) {
+    if (typeof arg === 'number' && this.children[arg]) {
+      return this.children.splice(arg, 1).shift();
+    }
+    if (arg instanceof Arboreal) {
+      return _removeChild(arg);
+    }
+    throw new Error("Invalid argument "+ arg);
+  };
+  
+  Arboreal.prototype.remove = function () {
+    return _removeChild(this);
+  };
+  
+  
+  Arboreal.prototype.root = function () {
+    var node = this;
+  
+    if (!node.parent) {
+      return this;
+    }
+  
+    while (node.parent) {
+      node = node.parent;
+    }
+    return node;
+  };
+  
+  Arboreal.prototype.isRoot = function () {
+    return !this.parent;
+  };
+  
+  Arboreal.prototype.traverseUp = function (iterator) {
+    _traverse(this, iterator, _traverseUp);
+  };
+  
+  Arboreal.prototype.traverseDown = function (iterator) {
+    _traverse(this, iterator, _traverseDown);
+  };
+  
+  Arboreal.prototype.toString = function () {
+    var lines = [];
+  
+    this.traverseDown(function (node) {
+      var separator = '|- ', indentation = '',  i;
+  
+      if (node.depth === 0) {
+        lines.push(node.id);
+        return;
+      }
+      for (i = 0; i < node.depth; i++) {
+        indentation += ' ';
+      }
+      lines.push( indentation + separator + node.id);
+    });
+    return lines.join("\n");
+  };
+  
+  Arboreal.prototype.find = function (finder) {
+    var match = null,
+        iterator = (typeof finder === 'function') ?
+          finder : function (node) {
+            if (node.id === finder) {
+              match = node;
+              return false;
+            }
+          };
+  
+    this.traverseDown(function (node) {
+      if (iterator.call(this, node)) {
+        match = node;
+        return false;
+      }
+    });
+  
+    return match;
+  };
+  
+  Arboreal.prototype.path = function (path, separator) {
+    separator = separator || '/';
+    //allow path to begin with 
+    if (path[0] === separator) path = path.substring(1);
+  
+    var indexes = path.split(separator),
+        index = null,
+        context = this,
+        i;
+  
+    for (i = 0; i < indexes.length; i++) {
+      index = parseInt(indexes[i], 10);
+      context = (context.children.length && context.children.length > index) ? 
+        context.children[index] : null;
+    }
+  
+    return context;
+  };
+  
+  Arboreal.prototype.toArray = function () {
+    var nodeList = [];
+    this.traverseDown(function (node) {
+      nodeList.push(node);
+    });
+    return nodeList;
+  };
 
-    Point.prototype.toString = function() {
-      return "(" + this.x + "," + this.y + ")";
-    };
+  Arboreal.prototype.__defineGetter__("length", function () {
+    return this.toArray().length;
+  });
 
-    return Point;
 
-  })();
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Arboreal;
+  } else {
+    this.Arboreal = Arboreal;
+  }
 
-  module.exports = Point;
-
-}).call(this);
+}(this);
 
 });
 
@@ -2076,437 +2274,6 @@ var qEndingLine = captureLine();
 
 });
 
-require.define("/projects/zombiekit/coffee/tiled-map-renderer.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Q, TileMapRenderer;
-
-  Q = require("q");
-
-  TileMapRenderer = (function() {
-
-    function TileMapRenderer() {}
-
-    TileMapRenderer.findCoordsForIndex = function(index, width) {
-      return {
-        x: ((index - 1) % width) + 1,
-        y: Math.ceil(index / width)
-      };
-    };
-
-    TileMapRenderer.renderMapToContext = function(map, context) {
-      var deferred, tileset;
-      tileset = new Image();
-      deferred = Q.defer();
-      tileset.onload = function() {
-        var coords, dx, dy, point, sx, sy, tileHeight, tileWidth, width, x, y, _i, _j;
-        tileWidth = map.data.tilewidth;
-        tileHeight = map.data.tileheight;
-        width = map.data.width;
-        for (y = _i = 1; _i <= 5; y = ++_i) {
-          for (x = _j = 1; _j <= 5; x = ++_j) {
-            point = map.findPoint({
-              x: x,
-              y: y
-            });
-            coords = TileMapRenderer.findCoordsForIndex(point.type, tileset.naturalWidth / tileWidth);
-            sx = (coords.x - 1) * tileWidth;
-            sy = (coords.y - 1) * tileHeight;
-            dx = (x - 1) * tileWidth;
-            dy = (y - 1) * tileHeight;
-            context.drawImage(tileset, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
-          }
-        }
-        return deferred.resolve(context);
-      };
-      tileset.src = 'img/' + map.data.tilesets[0].image;
-      return deferred.promise;
-    };
-
-    return TileMapRenderer;
-
-  })();
-
-  module.exports = TileMapRenderer;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Agent, Arboreal, Map, Path;
-
-  Arboreal = require("../lib/arboreal");
-
-  Map = require("./map");
-
-  Path = require("./path");
-
-  Agent = (function() {
-
-    function Agent(map) {
-      this.map = map;
-      this.position = {
-        x: 1,
-        y: 1
-      };
-    }
-
-    Agent.prototype.nonCollidablePointsFromPoint = function(point) {
-      var down, left, ncpoint, nonCollidablePoints, right, up, _i, _len, _ref;
-      up = this.map.findPoint({
-        x: point.x,
-        y: point.y - 1
-      });
-      right = this.map.findPoint({
-        x: point.x + 1,
-        y: point.y
-      });
-      down = this.map.findPoint({
-        x: point.x,
-        y: point.y + 1
-      });
-      left = this.map.findPoint({
-        x: point.x - 1,
-        y: point.y
-      });
-      nonCollidablePoints = [];
-      _ref = [up, right, down, left];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        ncpoint = _ref[_i];
-        if ((ncpoint != null ? ncpoint.type : void 0) === Map.road) {
-          nonCollidablePoints.push(ncpoint);
-        }
-      }
-      return nonCollidablePoints;
-    };
-
-    Agent.prototype.findBestPath = function(originPoint, goalPoint) {
-      var bestPoint, bestPointHeuristicValue, bestRoute, currentPoint, point, pointHeuristicValue, treeCurrentNode, treeHead, unvisitedPoints, _i, _j, _len, _len1, _ref, _ref1, _ref2;
-      currentPoint = originPoint;
-      currentPoint.visited = true;
-      treeHead = treeCurrentNode = new Arboreal(null, currentPoint);
-      bestRoute = [];
-      while (!currentPoint.equals(goalPoint)) {
-        _ref = this.nonCollidablePointsFromPoint(currentPoint);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          point = _ref[_i];
-          if ((_ref1 = treeCurrentNode.parent) != null ? _ref1.data.equals(point) : void 0) {
-            point.visited = true;
-          }
-          treeCurrentNode.appendChild(point);
-        }
-        unvisitedPoints = [];
-        treeHead.traverseDown(function(node) {
-          if (!node.data.visited) {
-            return unvisitedPoints.push(node.data);
-          }
-        });
-        bestPoint = unvisitedPoints[0];
-        bestPointHeuristicValue = this.heuristicValue(bestPoint, goalPoint, treeHead);
-        _ref2 = unvisitedPoints.slice(1);
-        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-          point = _ref2[_j];
-          pointHeuristicValue = this.heuristicValue(point, goalPoint, treeHead);
-          if (pointHeuristicValue < bestPointHeuristicValue) {
-            bestPoint = point;
-            bestPointHeuristicValue = pointHeuristicValue;
-          }
-        }
-        currentPoint = bestPoint;
-        currentPoint.visited = true;
-        treeCurrentNode = treeHead.find(function(node) {
-          return node.data === currentPoint;
-        });
-      }
-      while (treeCurrentNode) {
-        bestRoute.push(treeCurrentNode != null ? treeCurrentNode.data : void 0);
-        treeCurrentNode = treeCurrentNode.parent;
-      }
-      bestRoute.reverse();
-      return new Path(bestRoute);
-    };
-
-    Agent.prototype.heuristicValue = function(point, goalPoint, treeHead) {
-      return this.distanceToPoint(point, goalPoint) + this.pathCost(point, treeHead);
-    };
-
-    Agent.prototype.distanceToPoint = function(pointA, pointB) {
-      return Math.abs(pointA.x - pointB.x) + Math.abs(pointA.y - pointB.y);
-    };
-
-    Agent.prototype.pathCost = function(point, treeHead) {
-      var cost, treeB;
-      cost = 0;
-      treeB = treeHead.find(function(node) {
-        return node.data === point;
-      });
-      while (treeB) {
-        cost += treeB.data.cost;
-        treeB = treeB.parent;
-      }
-      return cost;
-    };
-
-    return Agent;
-
-  })();
-
-  module.exports = Agent;
-
-}).call(this);
-
-});
-
-require.define("/projects/zombiekit/lib/arboreal.js",function(require,module,exports,__dirname,__filename,process){!function () {
-  function include (array, item) {
-    return array.indexOf(item) > -1;
-  }
-
-  function _traverseDown (context, iterator) {
-    var doContinue = true;
-  
-    (function walkDown (node) {
-      var i, newContext;
-  
-      if (!doContinue) return;
-  
-      if (iterator(node) === false) {
-        //break the traversal loop if the iterator returns a falsy value
-        doContinue = false;
-      }
-      else {
-        for (i = 0; i < node.children.length; i++) {
-          newContext = node.children[i];
-          walkDown(newContext);
-        }
-      }
-    })(context);
-  }
-
-
-  function _traverseUp (context, iterator) {
-    var i, node, doContinue;
-
-    while (context) {
-      if ( iterator(context) === false ) return;
-
-      for (i = 0; i < context.children.length; i++) {
-        node = context.children[i];
-        if ( iterator(node) === false ) return;
-      }
-      context = context.parent;
-    }
-  }
-  
-  
-  function _traverse (context, iterator, callback) {
-    var visited = [],
-        callIterator = function (node) {
-          var id = node.id,
-              returned;
-  
-          if (! include(visited, id)) {
-            returned = iterator.call(node, node);
-            visited.push(id);
-  
-            if (returned === false) {
-              return returned;
-            }
-          }
-        },
-        i, node;
-  
-    callback(context, callIterator);
-  }
-  
-
-  function _removeChild (node) {
-    var parent = node.parent, 
-        child,
-        i;
-  
-    for (i = 0; i < parent.children.length; i++) {
-      child = parent.children[i];
-  
-      if (child === node) {
-        return parent.children.splice(i, 1).shift();
-      }
-    }
-  }
-  
-  function nodeId (parent, separator) {
-    separator = separator || '/';
-    if (parent) {
-      return [parent.id, parent.children.length ].join(separator);
-    }
-    else {
-      return '0';
-    }
-  }
-  
-  
-  function Arboreal (parent, data, id) {
-    this.depth = parent ? parent.depth + 1 : 0;
-    this.data = data || {};
-    this.parent = parent || null;
-    this.id = id || nodeId(parent);
-    this.children = [];
-  }
-  
-  Arboreal.parse = function (object, childrenAttr) {
-    var root, getNodeData = function (node) {
-          var attr, nodeData = {};
-          for (attr in node) {
-            if (attr !== childrenAttr) nodeData[attr] = node[attr];
-          }
-          return nodeData;
-        };
-  
-    (function walkDown(node, parent) {
-      var newNode, i;
-  
-      if (!parent) {
-        newNode = root = new Arboreal(null, getNodeData(node));
-      } else {
-        newNode = new Arboreal(parent, getNodeData(node));
-        parent.children.push(newNode);
-      }
-      if (childrenAttr in node) {
-        for (i = 0; i < node[childrenAttr].length; i++ ) {
-          walkDown(node[childrenAttr][i], newNode);
-        }
-      }
-    })(object);
-  
-    return root;
-  
-  };
-  
-  Arboreal.prototype.appendChild = function (data, id) {
-    var child = new Arboreal(this, data, id);
-    this.children.push(child);
-    return this;
-  };
-  
-  Arboreal.prototype.removeChild = function (arg) {
-    if (typeof arg === 'number' && this.children[arg]) {
-      return this.children.splice(arg, 1).shift();
-    }
-    if (arg instanceof Arboreal) {
-      return _removeChild(arg);
-    }
-    throw new Error("Invalid argument "+ arg);
-  };
-  
-  Arboreal.prototype.remove = function () {
-    return _removeChild(this);
-  };
-  
-  
-  Arboreal.prototype.root = function () {
-    var node = this;
-  
-    if (!node.parent) {
-      return this;
-    }
-  
-    while (node.parent) {
-      node = node.parent;
-    }
-    return node;
-  };
-  
-  Arboreal.prototype.isRoot = function () {
-    return !this.parent;
-  };
-  
-  Arboreal.prototype.traverseUp = function (iterator) {
-    _traverse(this, iterator, _traverseUp);
-  };
-  
-  Arboreal.prototype.traverseDown = function (iterator) {
-    _traverse(this, iterator, _traverseDown);
-  };
-  
-  Arboreal.prototype.toString = function () {
-    var lines = [];
-  
-    this.traverseDown(function (node) {
-      var separator = '|- ', indentation = '',  i;
-  
-      if (node.depth === 0) {
-        lines.push(node.id);
-        return;
-      }
-      for (i = 0; i < node.depth; i++) {
-        indentation += ' ';
-      }
-      lines.push( indentation + separator + node.id);
-    });
-    return lines.join("\n");
-  };
-  
-  Arboreal.prototype.find = function (finder) {
-    var match = null,
-        iterator = (typeof finder === 'function') ?
-          finder : function (node) {
-            if (node.id === finder) {
-              match = node;
-              return false;
-            }
-          };
-  
-    this.traverseDown(function (node) {
-      if (iterator.call(this, node)) {
-        match = node;
-        return false;
-      }
-    });
-  
-    return match;
-  };
-  
-  Arboreal.prototype.path = function (path, separator) {
-    separator = separator || '/';
-    //allow path to begin with 
-    if (path[0] === separator) path = path.substring(1);
-  
-    var indexes = path.split(separator),
-        index = null,
-        context = this,
-        i;
-  
-    for (i = 0; i < indexes.length; i++) {
-      index = parseInt(indexes[i], 10);
-      context = (context.children.length && context.children.length > index) ? 
-        context.children[index] : null;
-    }
-  
-    return context;
-  };
-  
-  Arboreal.prototype.toArray = function () {
-    var nodeList = [];
-    this.traverseDown(function (node) {
-      nodeList.push(node);
-    });
-    return nodeList;
-  };
-
-  Arboreal.prototype.__defineGetter__("length", function () {
-    return this.toArray().length;
-  });
-
-
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Arboreal;
-  } else {
-    this.Arboreal = Arboreal;
-  }
-
-}(this);
-
-});
-
 require.define("/projects/zombiekit/lib/zepto.js",function(require,module,exports,__dirname,__filename,process){/* Zepto v1.0rc1 - polyfill zepto event detect fx ajax form touch - zeptojs.com/license */
 ;(function(undefined){
   if (String.prototype.trim === undefined) // fix for iOS 3.2
@@ -3873,9 +3640,19 @@ require.define("/projects/zombiekit/coffee/entity.coffee",function(require,modul
     function Entity(world, position) {
       this.world = world;
       this.position = position;
+      this.shape = {};
+      this.setPosition(this.position);
     }
 
-    Entity.prototype.shape = function() {};
+    Entity.prototype.setPosition = function(position) {
+      if (position) {
+        this.position = position;
+      }
+      if (this.shape) {
+        this.shape.x = this.position.x * this.world.tileSize;
+        return this.shape.y = this.position.y * this.world.tileSize;
+      }
+    };
 
     return Entity;
 
@@ -3887,62 +3664,156 @@ require.define("/projects/zombiekit/coffee/entity.coffee",function(require,modul
 
 });
 
-require.define("/projects/zombiekit/coffee/path.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Path, Point;
+require.define("/projects/zombiekit/coffee/map.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Map, Point,
+    __slice = [].slice;
 
   Point = require("./point");
 
-  Path = (function() {
+  Map = (function() {
 
-    function Path(points) {
-      this.points = points;
+    Map.road = 109;
+
+    Map.nonCollidable = [502, 496, 497, 445, 188, 508, 442, 443];
+
+    Map.tiles = {
+      food: 188,
+      water: 442,
+      guns: 443,
+      home: 445,
+      ammo: 508
+    };
+
+    function Map(data) {
+      this.data = data;
     }
 
-    Path.prototype.cost = function() {
-      var point, sum, _i, _len, _ref;
-      sum = 0;
-      _ref = this.points;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        point = _ref[_i];
-        sum = sum + point.cost;
-      }
-      return sum;
-    };
-
-    Path.prototype.toString = function() {
-      var point, string, _i, _len, _ref;
-      string = "";
-      _ref = this.points;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        point = _ref[_i];
-        string = string + point.toString() + " ";
-      }
-      return string;
-    };
-
-    Path.prototype.nextPoint = function(point) {
-      var i, pathPoint, _i, _len, _ref, _ref1;
-      _ref = this.points;
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        pathPoint = _ref[i];
-        if (pathPoint.equals(point)) {
-          return (_ref1 = this.points[i + 1]) != null ? _ref1 : this.points[i];
+    Map.prototype.layer = function(name) {
+      var layer, _ref;
+      return (_ref = ((function() {
+        var _i, _len, _ref1, _results;
+        _ref1 = this.data.layers;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          layer = _ref1[_i];
+          if (layer.name === name) {
+            _results.push(layer);
+          }
         }
+        return _results;
+      }).call(this))[0]) != null ? _ref : this.data.layers[0];
+    };
+
+    Map.prototype.getTypeForIndex = function(index) {
+      var _ref;
+      return (_ref = this.data.tilesets[0].tileproperties[index - 1]) != null ? _ref['type'] : void 0;
+    };
+
+    Map.prototype.getCollidableForIndex = function(index) {
+      var collidable, _ref;
+      collidable = (_ref = this.data.tilesets[0].tileproperties[index - 1]) != null ? _ref['collidable'] : void 0;
+      if (collidable && collidable === "0") {
+        return false;
+      } else {
+        return true;
       }
     };
 
-    return Path;
+    Map.prototype.getCostForIndex = function(index) {
+      return this.layer('cost').data[index];
+    };
+
+    Map.prototype.findPoint = function() {
+      var args, collidable, coords, cost, index, tileIndex, type;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (args.length === 1) {
+        coords = args[0];
+      } else {
+        coords = {
+          x: args[0],
+          y: args[1]
+        };
+      }
+      if (coords.x < 1 || coords.y < 1 || coords.x > this.data.width || coords.y > this.layer().data.length / this.layer().width) {
+        return void 0;
+      }
+      index = ((coords.y - 1) * this.data.width + coords.x) - 1;
+      tileIndex = this.layer('graphic').data[index];
+      cost = this.getCostForIndex(tileIndex);
+      type = this.getTypeForIndex(tileIndex);
+      collidable = this.getCollidableForIndex(tileIndex);
+      return new Point(coords.x, coords.y, cost, type, collidable, tileIndex);
+    };
+
+    return Map;
 
   })();
 
-  module.exports = Path;
+  module.exports = Map;
+
+}).call(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/tiled-map-renderer.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Q, TileMapRenderer;
+
+  Q = require("q");
+
+  TileMapRenderer = (function() {
+
+    function TileMapRenderer() {}
+
+    TileMapRenderer.findCoordsForIndex = function(index, width) {
+      return {
+        x: ((index - 1) % width) + 1,
+        y: Math.ceil(index / width)
+      };
+    };
+
+    TileMapRenderer.renderMapToContext = function(map, context) {
+      var deferred, tileset;
+      tileset = new Image();
+      deferred = Q.defer();
+      tileset.onload = function() {
+        var coords, dx, dy, height, point, sx, sy, tileHeight, tileWidth, width, x, y, _i, _j;
+        tileWidth = map.data.tilewidth;
+        tileHeight = map.data.tileheight;
+        width = map.data.width;
+        height = map.data.height;
+        for (y = _i = 1; 1 <= width ? _i <= width : _i >= width; y = 1 <= width ? ++_i : --_i) {
+          for (x = _j = 1; 1 <= height ? _j <= height : _j >= height; x = 1 <= height ? ++_j : --_j) {
+            point = map.findPoint({
+              x: x,
+              y: y
+            });
+            coords = TileMapRenderer.findCoordsForIndex(point.tileIndex, tileset.naturalWidth / tileWidth);
+            sx = (coords.x - 1) * tileWidth;
+            sy = (coords.y - 1) * tileHeight;
+            dx = (x - 1) * tileWidth;
+            dy = (y - 1) * tileHeight;
+            context.drawImage(tileset, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
+          }
+        }
+        return deferred.resolve(context);
+      };
+      tileset.src = 'img/' + map.data.tilesets[0].image;
+      return deferred.promise;
+    };
+
+    return TileMapRenderer;
+
+  })();
+
+  module.exports = TileMapRenderer;
 
 }).call(this);
 
 });
 
 require.define("/projects/zombiekit/coffee/world.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Agent, MapFactory, Q, TiledMapRenderer, World, Zepto;
+  var Agent, MapFactory, Q, TiledMapRenderer, World, Zepto,
+    __slice = [].slice;
 
   MapFactory = require("./map-factory");
 
@@ -3961,29 +3832,41 @@ require.define("/projects/zombiekit/coffee/world.coffee",function(require,module
       this.stage = new createjs.Stage(this.canvasElement);
       this.map = MapFactory.getMap();
       this.entities = [];
-      this.tileSize = 64;
+      this.tileSize = this.map.data.tileheight;
     }
 
     World.prototype.init = function() {
       var canvas, ctx,
         _this = this;
       canvas = document.createElement('canvas');
-      $(canvas).attr('width', 320);
-      $(canvas).attr('height', 320);
+      $(canvas).attr('width', 640);
+      $(canvas).attr('height', 640);
       ctx = canvas.getContext("2d");
-      TiledMapRenderer.renderMapToContext(this.map, ctx).then(function(value) {
+      return TiledMapRenderer.renderMapToContext(this.map, ctx).then((function(value) {
         var backgroundShape;
-        backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0, 0, 320, 320));
+        createjs.Ticker.setFPS(10);
+        createjs.Ticker.addListener(_this);
+        console.log('Rendered background');
+        backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0, 0, 640, 640));
         _this.stage.addChildAt(backgroundShape, 0);
         return _this.stage.update();
-      });
-      createjs.Ticker.setFPS(10);
-      return createjs.Ticker.addListener(this);
+      }), (function(error) {
+        return console.log('Error rendering map:', error);
+      }));
+    };
+
+    World.prototype.point = function() {
+      var args, _ref;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return (_ref = this.map).findPoint.apply(_ref, args);
     };
 
     World.prototype.addEntity = function(entity) {
       this.entities.push(entity);
-      return this.stage.addChild(entity.shape);
+      this.stage.addChild(entity.shape);
+      if (entity.debugShape) {
+        return this.stage.addChild(entity.debugShape);
+      }
     };
 
     World.prototype.update = function() {
@@ -4018,6 +3901,92 @@ require.define("/projects/zombiekit/coffee/world.coffee",function(require,module
 
 });
 
+require.define("/projects/zombiekit/coffee/path.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Path, Point;
+
+  Point = require("./point");
+
+  Path = (function() {
+
+    function Path(points) {
+      this.points = [].concat(points);
+      this.resetIndexes();
+    }
+
+    Path.prototype.resetIndexes = function() {
+      var i, point, _i, _len, _ref, _results;
+      _ref = this.points;
+      _results = [];
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        point = _ref[i];
+        _results.push(point.pathIndex = i);
+      }
+      return _results;
+    };
+
+    Path.prototype.cost = function() {
+      var point, sum, _i, _len, _ref;
+      sum = 0;
+      _ref = this.points;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        sum = sum + point.cost;
+      }
+      return sum;
+    };
+
+    Path.prototype.toString = function() {
+      var point, string, _i, _len, _ref;
+      string = "";
+      _ref = this.points;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        string = string + point.toString() + " ";
+      }
+      return string;
+    };
+
+    Path.prototype.key = function() {
+      var firstPoint, lastPoint;
+      firstPoint = this.points[0];
+      lastPoint = this.points[this.points.length - 1];
+      return firstPoint.toString() + lastPoint.toString();
+    };
+
+    Path.prototype.nextPoint = function(point) {
+      var _ref;
+      return (_ref = this.points[point.pathIndex + 1]) != null ? _ref : point;
+    };
+
+    Path.prototype.reverse = function() {
+      this.points = this.points.reverse();
+      return this;
+    };
+
+    Path.prototype.addPath = function(path) {
+      var lastPoint;
+      lastPoint = this.points[this.points.length - 1];
+      if (lastPoint && !lastPoint.equals(path.points[0])) {
+        return;
+      }
+      this.points = this.points.concat(path.points.slice(1));
+      return this.resetIndexes();
+    };
+
+    Path.keyFromPoints = function(twoPoints) {
+      return new Path(twoPoints).key();
+    };
+
+    return Path;
+
+  })();
+
+  module.exports = Path;
+
+}).call(this);
+
+});
+
 require.define("/projects/zombiekit/coffee/game.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var AgentEntity, Game, World;
 
@@ -4028,24 +3997,32 @@ require.define("/projects/zombiekit/coffee/game.coffee",function(require,module,
   Game = (function() {
 
     function Game() {
+      var _this = this;
       this.world = new World($('#canvas')[0]);
-      this.world.init();
-      this.agent = new AgentEntity(this.world, this.world.map.findPoint({
-        x: 1,
-        y: 1
-      }));
-      this.world.addEntity(this.agent);
-      /*console.log @agent.findBestPath(@world.map.findPoint({x:1,y:1}), @world.map.findPoint({x:3,y:5})).toString()
-      console.log @agent.findBestPath(@world.map.findPoint({x:1,y:1}), @world.map.findPoint({x:5,y:2})).toString()
-      console.log @agent.findBestPath(@world.map.findPoint({x:1,y:1}), @world.map.findPoint({x:4,y:4})).toString()
-      */
+      this.world.init().then((function(value) {
+        var path;
+        _this.agent = new AgentEntity(_this.world, _this.world.point({
+          x: 1,
+          y: 1
+        }));
+        _this.world.addEntity(_this.agent);
+        /*@world.pointsOfInterest = [
+          @world.point(3, 3),
+          @world.point(7, 4),
+          @world.point(18, 6),
+          @world.point(8, 17),
+          @world.point(19, 17),
+          @world.point(3, 3)
+        ]
+        */
 
-      this.agent.planPath(this.world.map.findPoint({
-        x: 1,
-        y: 1
-      }), this.world.map.findPoint({
-        x: 3,
-        y: 5
+        _this.world.pointsOfInterest = [_this.world.point(3, 3), _this.world.point(8, 17)];
+        path = _this.agent.findBestTour(_this.world.pointsOfInterest);
+        console.log(path);
+        _this.agent.setPath(path);
+        return _this.agent.executePath();
+      }), (function(error) {
+        return console.log('Error initializing world', error);
       }));
     }
 
@@ -4061,9 +4038,9 @@ require.define("/projects/zombiekit/coffee/game.coffee",function(require,module,
 
 require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var Agent, AgentEntity, Entity, Point,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Entity = require("./entity");
 
@@ -4076,26 +4053,43 @@ require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require
     __extends(AgentEntity, _super);
 
     function AgentEntity() {
+      this.drawDebug = __bind(this.drawDebug, this);
       AgentEntity.__super__.constructor.apply(this, arguments);
       this.agent = new Agent(this.world.map);
       this.shape = this.createShape();
-      this.shape.x = this.position.x * this.world.tileSize;
-      this.shape.y = this.position.y * this.world.tileSize;
-      this.shape.onTick = function() {
-        return console.log('shape tick');
-      };
+      this.shape.onTick = function() {};
+      this.followPath = false;
+      this.debugShape = new createjs.Shape(new createjs.Graphics());
     }
 
-    AgentEntity.prototype.findBestPath = function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return this.agent.findBestPath(args[0], args[1]);
+    AgentEntity.prototype.drawDebug = function(point, unvisitedPoints) {
+      var upoint, _i, _len;
+      if (point) {
+        this.debugShape.graphics.setStrokeStyle(3).beginStroke(createjs.Graphics.getRGB(230, 0, 0, 1)).drawCircle((-this.world.tileSize / 2) + (point.x * this.world.tileSize), (-this.world.tileSize / 2) + (point.y * this.world.tileSize), 12);
+        if (unvisitedPoints) {
+          for (_i = 0, _len = unvisitedPoints.length; _i < _len; _i++) {
+            upoint = unvisitedPoints[_i];
+            this.debugShape.graphics.setStrokeStyle(3).beginStroke(createjs.Graphics.getRGB(0, 230, 0, 1)).drawCircle((-this.world.tileSize / 2) + (upoint.x * this.world.tileSize), (-this.world.tileSize / 2) + (upoint.y * this.world.tileSize), 12);
+          }
+        }
+        return this.world.stage.update();
+      } else {
+        this.debugShape.graphics.clear();
+        return this.world.stage.update();
+      }
     };
 
-    AgentEntity.prototype.planPath = function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return this.path = this.findBestPath.apply(this, args);
+    AgentEntity.prototype.findBestTour = function(args) {
+      return this.agent.findBestTour(args, this.drawDebug);
+    };
+
+    AgentEntity.prototype.setPath = function(path) {
+      this.setPosition(path.points[0]);
+      return this.path = path;
+    };
+
+    AgentEntity.prototype.executePath = function() {
+      return this.followPath = true;
     };
 
     AgentEntity.prototype.createShape = function() {
@@ -4103,14 +4097,14 @@ require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require
       g = new createjs.Graphics();
       g.setStrokeStyle(5);
       g.beginStroke(createjs.Graphics.getRGB(0, 0, 0, 1));
-      g.drawCircle(-this.world.tileSize / 2, -this.world.tileSize / 2, 30);
+      g.drawCircle(-this.world.tileSize / 2, -this.world.tileSize / 2, 15);
       circle = new createjs.Shape(g);
       return circle;
     };
 
     AgentEntity.prototype.update = function() {
       var newPosition;
-      if (this.path) {
+      if (this.followPath) {
         newPosition = this.path.nextPoint(this.position);
         if (newPosition.equals(this.position)) {
           this.world.pause();
@@ -4127,6 +4121,239 @@ require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require
   })(Entity);
 
   module.exports = AgentEntity;
+
+}).call(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/point.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Point;
+
+  Point = (function() {
+
+    function Point(x, y, cost, type, collidable, tileIndex) {
+      var _ref;
+      this.x = x;
+      this.y = y;
+      this.cost = cost;
+      this.type = type;
+      this.collidable = collidable;
+      this.tileIndex = tileIndex;
+      this.cost = (_ref = this.cost) != null ? _ref : 1;
+      this.visited = false;
+      this.pathIndex = void 0;
+    }
+
+    Point.prototype.equals = function(point) {
+      var result;
+      result = (point.x === this.x) && (point.y === this.y);
+      return result;
+    };
+
+    Point.prototype.toString = function() {
+      return "(" + this.x + "," + this.y + ")";
+    };
+
+    return Point;
+
+  })();
+
+  module.exports = Point;
+
+}).call(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Agent, Arboreal, Path;
+
+  Arboreal = require("../lib/arboreal");
+
+  Path = require("./path");
+
+  Agent = (function() {
+
+    function Agent(map) {
+      this.map = map;
+      this.position = {
+        x: 1,
+        y: 1
+      };
+    }
+
+    Agent.prototype.nonCollidablePointsFromPoint = function(point) {
+      var down, left, ncpoint, nonCollidablePoints, right, up, _i, _len, _ref;
+      up = this.map.findPoint({
+        x: point.x,
+        y: point.y - 1
+      });
+      right = this.map.findPoint({
+        x: point.x + 1,
+        y: point.y
+      });
+      down = this.map.findPoint({
+        x: point.x,
+        y: point.y + 1
+      });
+      left = this.map.findPoint({
+        x: point.x - 1,
+        y: point.y
+      });
+      nonCollidablePoints = [];
+      _ref = [up, right, down, left];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ncpoint = _ref[_i];
+        if ((ncpoint != null ? ncpoint.collidable : void 0) === false) {
+          nonCollidablePoints.push(ncpoint);
+        }
+      }
+      return nonCollidablePoints;
+    };
+
+    Agent.prototype.findBestPath = function(originPoint, goalPoint, drawDebug) {
+      var bestPoint, bestPointHeuristicValue, bestRoute, currentPoint, key, ncpoints, point, pointHeuristicValue, treeCurrentNode, treeHead, unvisitedPoints, unvisitedPointsMap, upoint, visitedPointsMap, _i, _j, _len, _len1, _ref;
+      if (originPoint.collidable === true || goalPoint.collidable === true) {
+        return void 0;
+      }
+      currentPoint = originPoint;
+      currentPoint.visited = true;
+      treeHead = treeCurrentNode = new Arboreal(null, currentPoint);
+      bestRoute = [];
+      if (drawDebug) {
+        drawDebug(currentPoint);
+      }
+      while (!currentPoint.equals(goalPoint)) {
+        ncpoints = this.nonCollidablePointsFromPoint(currentPoint);
+        for (_i = 0, _len = ncpoints.length; _i < _len; _i++) {
+          point = ncpoints[_i];
+          treeCurrentNode.appendChild(point);
+        }
+        unvisitedPointsMap = {};
+        visitedPointsMap = {};
+        unvisitedPoints = [];
+        treeHead.traverseDown(function(node) {
+          var key;
+          key = node.data.x + '.' + node.data.y;
+          if (node.data.visited) {
+            visitedPointsMap[key] = node.data;
+          } else {
+            unvisitedPointsMap[key] = node.data;
+          }
+          return true;
+        });
+        for (key in unvisitedPointsMap) {
+          upoint = unvisitedPointsMap[key];
+          if (!visitedPointsMap[key]) {
+            unvisitedPoints.push(upoint);
+          }
+        }
+        if (drawDebug) {
+          drawDebug(currentPoint, unvisitedPoints);
+        }
+        bestPoint = unvisitedPoints[0];
+        bestPointHeuristicValue = this.heuristicValue(bestPoint, goalPoint, treeHead);
+        _ref = unvisitedPoints.slice(1);
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          point = _ref[_j];
+          pointHeuristicValue = this.heuristicValue(point, goalPoint, treeHead);
+          if (pointHeuristicValue < bestPointHeuristicValue) {
+            bestPoint = point;
+            bestPointHeuristicValue = pointHeuristicValue;
+          }
+        }
+        currentPoint = bestPoint;
+        currentPoint.visited = true;
+        treeCurrentNode = treeHead.find(function(node) {
+          return node.data === currentPoint;
+        });
+        if (drawDebug) {
+          drawDebug(currentPoint);
+          '';
+
+        }
+      }
+      while (treeCurrentNode) {
+        bestRoute.push(treeCurrentNode != null ? treeCurrentNode.data : void 0);
+        treeCurrentNode = treeCurrentNode.parent;
+      }
+      if (drawDebug) {
+        drawDebug();
+      }
+      bestRoute.reverse();
+      return new Path(bestRoute);
+    };
+
+    Agent.prototype.heuristicValue = function(point, goalPoint, treeHead) {
+      return this.distanceToPoint(point, goalPoint) + this.pathCost(point, treeHead);
+    };
+
+    Agent.prototype.distanceToPoint = function(pointA, pointB) {
+      return Math.abs(pointA.x - pointB.x) + Math.abs(pointA.y - pointB.y);
+    };
+
+    Agent.prototype.pathCost = function(point, treeHead) {
+      var cost, treeB;
+      cost = 0;
+      treeB = treeHead.find(function(node) {
+        return node.data === point;
+      });
+      while (treeB) {
+        cost += treeB.data.cost;
+        treeB = treeB.parent;
+      }
+      return cost;
+    };
+
+    Agent.prototype.findBestTour = function(points, drawDebug) {
+      var array, i, key, path, paths, permutations, point, reversePath, tour, tpath, _i, _j, _len, _len1;
+      console.log('Finding best tour...');
+      console.log(points);
+      permutations = this.permutationsTwoByTwo(points);
+      paths = {};
+      for (_i = 0, _len = permutations.length; _i < _len; _i++) {
+        array = permutations[_i];
+        path = this.findBestPath(array[0], array[1], drawDebug);
+        paths[path.key()] = path;
+        reversePath = new Path(path.points).reverse();
+        paths[reversePath.key()] = reversePath;
+      }
+      console.log(paths);
+      tour = new Path([]);
+      for (i = _j = 0, _len1 = points.length; _j < _len1; i = ++_j) {
+        point = points[i];
+        tpath = new Path(points.slice(i, (i + 1) + 1 || 9e9));
+        key = tpath.key();
+        if (i < points.length - 1) {
+          tour.addPath(paths[key]);
+        }
+      }
+      console.log('Best tour found.');
+      return tour;
+    };
+
+    Agent.prototype.permutationsTwoByTwo = function(arr) {
+      var res, results, value, _i, _len, _ref;
+      if (arr.length === 0) {
+        return [];
+      }
+      results = [];
+      _ref = arr.slice(1);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        value = _ref[_i];
+        if (arr[0].equals(value)) {
+          continue;
+        }
+        res = [arr[0], value];
+        results.push(res);
+      }
+      return results.concat(this.permutationsTwoByTwo(arr.slice(1)));
+    };
+
+    return Agent;
+
+  })();
+
+  module.exports = Agent;
 
 }).call(this);
 
