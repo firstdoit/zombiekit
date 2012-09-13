@@ -97,7 +97,7 @@ class Agent
 
   ## Calculate the heuristic value of this point, given a goal point and a points tree
   heuristicValue: (point, goalPoint, treeHead) ->
-    return ( @distanceToPoint(point, goalPoint) * 5 ) + @pathCost(point, treeHead)
+    return ( @distanceToPoint(point, goalPoint) * 10 ) + @pathCost(point, treeHead)
 
   ## Calculate the Manhattan distance from pointA to pointB
   distanceToPoint: (pointA, pointB) ->

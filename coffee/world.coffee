@@ -18,7 +18,7 @@ class World
     ctx = canvas.getContext("2d")
     TiledMapRenderer.renderMapToContext(@map, ctx).then(
       ((value) =>
-        createjs.Ticker.setFPS(10)
+        createjs.Ticker.setFPS( World.FPS )
         createjs.Ticker.addListener(@)
         console.log 'Rendered background'
         backgroundShape = new createjs.Shape(new createjs.Graphics().beginBitmapFill(canvas).drawRect(0,0,640,640))
@@ -56,6 +56,8 @@ class World
 
     @entities = []
     @pause(false)
+
+  @FPS = 15
 
 
 ## export
