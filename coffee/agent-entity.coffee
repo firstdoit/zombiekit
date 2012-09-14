@@ -6,6 +6,7 @@ class AgentEntity extends Entity
   constructor: ->
     super
     @agent = new Agent(@world.map)
+    if game.debugMode then @agent.drawDebugFunction = @drawDebug
     @shape = @createShape()
     @shape.onTick = ->
       ##console.log 'shape tick'
@@ -47,7 +48,7 @@ class AgentEntity extends Entity
       @world.stage.update()
       return false
 
-  findBestTour: (args) -> @agent.findBestTour(args, if game.debugMode then @drawDebug else undefined)
+  findBestTour: (args) -> @agent.findBestTour(args)
 
   setPath: (path) ->
     @setPosition(path.points[0])

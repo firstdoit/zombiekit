@@ -4,6 +4,13 @@ Path = require("./path")
 class Agent
   constructor: (@map) ->
     @position = {x: 1, y: 1}
+    @currentPoint = {}
+    @currentGoalPoint = {}
+    @treeHead = {}
+    @treeCurrentNode = {}
+    @paths = {}
+    @currentPathPoints = []
+    @drawDebugFunction = undefined
 
   ## Find the nonCollidable points dirrectly adjacent from the given point
   nonCollidablePointsFromPoint: (point) ->
@@ -17,83 +24,103 @@ class Agent
     return nonCollidablePoints
 
   ## A* implementation
-  findBestPath: (originPoint, goalPoint, drawDebug) ->
-    if originPoint.collidable is true or goalPoint.collidable is true
-      return undefined
-    ## Initialize our current point
-    currentPoint = originPoint
-    currentPoint.visited = true
-    ## Create two tree node variables - head and current
-    treeHead = treeCurrentNode = new Arboreal(null, currentPoint)
-    ## The array for the best route
-    bestRoute = []
+  findBestPath: (originPoint, goalPoint) ->
+    ## Check if it's a known path
+    existingPathKey = new Path([originPoint, goalPoint]).key()
+    return @paths[existingPathKey] if @paths[existingPathKey]
 
-    drawDebug?({point:currentPoint})
+    ## Start the agent state
+    @startPathFinding(originPoint, goalPoint)
 
     ## While we haven't found the goal point
-    while not currentPoint.equals goalPoint
-      ncpoints = @nonCollidablePointsFromPoint currentPoint
-      drawDebug?({nonCollidablePoints: ncpoints})
-
-      ## For each navigable point, append it to the current tree node.
-      for point in ncpoints
-        treeCurrentNode.appendChild point
-
-      ## Fill the unvisitedPoints array
-      unvisitedPointsMap = {}
-      visitedPointsMap = {}
-      treeHead.traverseDown( (node) ->
-        key = node.data.x + '.' + node.data.y
-        if node.data.visited
-          visitedPointsMap[key] = node.data
-        else
-          unvisitedPointsMap[key] = node.data
-        return true
-      )
-
-      ## Let's search only for the points that have never been visited
-      unvisitedPoints = []
-      for key, upoint of unvisitedPointsMap
-        unvisitedPoints.push(upoint) if not visitedPointsMap[key]
-
-      ## For debugging purposes only
-      if drawDebug
-        visitedPoints = []
-        for key, upoint of visitedPointsMap
-          visitedPoints.push(upoint)
-        drawDebug({visitedPoints:visitedPoints, unvisitedPoints: unvisitedPoints})
-
-      ## Initialize our best point in this round
-      bestPoint = unvisitedPoints[0]
-      bestPointHeuristicValue = @heuristicValue bestPoint, goalPoint, treeHead
-
-      ##Choose the best point to visit next from the rest of the unvisited points
-      for point in unvisitedPoints[1..]
-        pointHeuristicValue = @heuristicValue point, goalPoint, treeHead
-        if pointHeuristicValue < bestPointHeuristicValue
-          bestPoint = point
-          bestPointHeuristicValue = pointHeuristicValue
-
-      drawDebug?({point:bestPoint})
-
-      ## Lest visit the best point next
-      currentPoint = bestPoint
-      currentPoint.visited = true;
-      ## Update the current tree node
-      treeCurrentNode = treeHead.find( (node) -> node.data == currentPoint )
-
-    ## end while
+    pointFound = false;
+    while not pointFound
+      pointFound = @findNextBestPoint()
 
     ## Construct the best route from the bottom of the tree to the head
-    while treeCurrentNode
-      bestRoute.push(treeCurrentNode?.data)
-      treeCurrentNode = treeCurrentNode.parent
+    while @treeCurrentNode
+      @currentPathPoints.push(@treeCurrentNode?.data)
+      @treeCurrentNode = @treeCurrentNode.parent
 
     ## Clear the debug draw
-    drawDebug?()
+    @drawDebugFunction?()
 
-    bestRoute.reverse()
-    return new Path(bestRoute)
+    @currentPathPoints.reverse()
+    path = new Path(@currentPathPoints)
+    ## Store this path so we dont have to calculate it again next time it is asked.
+    @paths[path.key()] = path
+    return path
+
+  startPathFinding: (originPoint, goalPoint) ->
+    if originPoint.collidable is true or goalPoint.collidable is true
+      return undefined
+
+    @currentGoalPoint = goalPoint
+    ## Initialize our current point
+    @currentPoint = originPoint
+    @currentPoint.visited = true
+    ## Create two tree node variables - head and current
+    @treeHead = @treeCurrentNode = new Arboreal(null, @currentPoint)
+    ## The array for the best route
+    @currentPathPoints = []
+
+  findNextBestPoint: ->
+    ncpoints = @nonCollidablePointsFromPoint @currentPoint
+    @drawDebugFunction?({nonCollidablePoints: ncpoints})
+
+    ## For each navigable point, append it to the current tree node.
+    for point in ncpoints
+      @treeCurrentNode.appendChild point
+
+    ## Fill the unvisitedPoints array
+    unvisitedPointsMap = {}
+    visitedPointsMap = {}
+    @treeHead.traverseDown( (node) ->
+      key = node.data.x + '.' + node.data.y
+      if node.data.visited
+        visitedPointsMap[key] = node.data
+      else
+        unvisitedPointsMap[key] = node.data
+      return true
+    )
+
+    ## Let's search only for the points that have never been visited
+    unvisitedPoints = []
+    for key, upoint of unvisitedPointsMap
+      unvisitedPoints.push(upoint) if not visitedPointsMap[key]
+
+    ## For debugging purposes only
+    if @drawDebugFunction
+      visitedPoints = []
+      for key, upoint of visitedPointsMap
+        visitedPoints.push(upoint)
+      @drawDebugFunction({visitedPoints:visitedPoints, unvisitedPoints: unvisitedPoints})
+
+    ## Impossible to find a path
+    if unvisitedPoints.length is 0
+      return true
+
+    ## Initialize our best point in this round
+    bestPoint = unvisitedPoints[0]
+    bestPointHeuristicValue = @heuristicValue bestPoint, @currentGoalPoint, @treeHead
+
+    ##Choose the best point to visit next from the rest of the unvisited points
+    for point in unvisitedPoints[1..]
+      pointHeuristicValue = @heuristicValue point, @currentGoalPoint, @treeHead
+      if pointHeuristicValue < bestPointHeuristicValue
+        bestPoint = point
+        bestPointHeuristicValue = pointHeuristicValue
+
+    @drawDebugFunction?({point:bestPoint})
+
+    ## Lest visit the best point next
+    @currentPoint = bestPoint
+    @currentPoint.visited = true;
+    ## Update the current tree node
+    @treeCurrentNode = @treeHead.find( (node) => node.data is @currentPoint )
+
+    return @currentPoint.equals @currentGoalPoint
+
 
   ## Calculate the heuristic value of this point, given a goal point and a points tree
   heuristicValue: (point, goalPoint, treeHead) ->
@@ -112,13 +139,13 @@ class Agent
       treeB = treeB.parent
     return cost
 
-  findBestTour: (points, drawDebug) ->
+  findBestTour: (points) ->
     console.log 'Finding best tour...'
     console.log points
     permutations = @permutationsTwoByTwo points
     paths = {}
     for array in permutations
-      path = @findBestPath(array[0], array[1], drawDebug)
+      path = @findBestPath(array[0], array[1])
       paths[path.key()] = path
       reversePath = new Path(path.points).reverse()
       paths[reversePath.key()] = reversePath
