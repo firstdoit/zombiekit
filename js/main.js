@@ -3911,120 +3911,6 @@ window.Zepto = Zepto
 
 });
 
-require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
-  var Agent, AgentEntity, Entity, Point,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Entity = require("./entity");
-
-  Agent = require("./agent");
-
-  Point = require("./point");
-
-  AgentEntity = (function(_super) {
-
-    __extends(AgentEntity, _super);
-
-    function AgentEntity() {
-      this.drawDebug = __bind(this.drawDebug, this);
-      AgentEntity.__super__.constructor.apply(this, arguments);
-      this.agent = new Agent(this.world.map);
-      this.shape = this.createShape();
-      this.shape.onTick = function() {};
-      this.followPath = false;
-      this.debugShape = new createjs.Shape(new createjs.Graphics());
-    }
-
-    AgentEntity.prototype.drawPoint = function(point, color) {
-      return this.debugShape.graphics.setStrokeStyle(3).beginStroke(color).drawCircle((-this.world.tileSize / 2) + (point.x * this.world.tileSize), (-this.world.tileSize / 2) + (point.y * this.world.tileSize), 12);
-    };
-
-    AgentEntity.prototype.drawDebug = function(options) {
-      var nonCollidablePoints, point, unvisitedPoints, upoint, visitedPoints, _i, _j, _k, _len, _len1, _len2;
-      if (options) {
-        if (options.unvisitedPoints) {
-          unvisitedPoints = options.unvisitedPoints;
-          for (_i = 0, _len = unvisitedPoints.length; _i < _len; _i++) {
-            upoint = unvisitedPoints[_i];
-            this.drawPoint(upoint, createjs.Graphics.getRGB(0, 230, 0, 1));
-          }
-        }
-        if (options.visitedPoints) {
-          visitedPoints = options.visitedPoints;
-          for (_j = 0, _len1 = visitedPoints.length; _j < _len1; _j++) {
-            upoint = visitedPoints[_j];
-            this.drawPoint(upoint, createjs.Graphics.getRGB(230, 230, 0, 1));
-          }
-        }
-        if (options.nonCollidablePoints) {
-          nonCollidablePoints = options.nonCollidablePoints;
-          for (_k = 0, _len2 = nonCollidablePoints.length; _k < _len2; _k++) {
-            upoint = nonCollidablePoints[_k];
-            this.drawPoint(upoint, createjs.Graphics.getRGB(0, 0, 230, 1));
-          }
-        }
-        if (options.point) {
-          point = options.point;
-          this.drawPoint(point, createjs.Graphics.getRGB(230, 0, 0, 1));
-        }
-        this.world.stage.update();
-        return true;
-      } else {
-        this.debugShape.graphics.clear();
-        this.world.stage.update();
-        return false;
-      }
-    };
-
-    AgentEntity.prototype.findBestTour = function(args) {
-      return this.agent.findBestTour(args, game.debugMode ? this.drawDebug : void 0);
-    };
-
-    AgentEntity.prototype.setPath = function(path) {
-      this.setPosition(path.points[0]);
-      return this.path = path;
-    };
-
-    AgentEntity.prototype.executePath = function() {
-      return this.followPath = true;
-    };
-
-    AgentEntity.prototype.createShape = function() {
-      var circle, g;
-      g = new createjs.Graphics();
-      g.setStrokeStyle(5);
-      g.beginStroke(createjs.Graphics.getRGB(0, 0, 0, 1));
-      g.drawCircle(-this.world.tileSize / 2, -this.world.tileSize / 2, 15);
-      circle = new createjs.Shape(g);
-      return circle;
-    };
-
-    AgentEntity.prototype.update = function() {
-      var newPosition;
-      if (this.followPath) {
-        newPosition = this.path.nextPoint(this.position);
-        if (newPosition.equals(this.position)) {
-          this.world.pause();
-          return;
-        }
-        this.position = newPosition;
-        this.shape.x = this.position.x * this.world.tileSize;
-        return this.shape.y = this.position.y * this.world.tileSize;
-      }
-    };
-
-    return AgentEntity;
-
-  })(Entity);
-
-  module.exports = AgentEntity;
-
-}).call(this);
-
-});
-
 require.define("/projects/zombiekit/coffee/entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var Entity;
 
@@ -4154,7 +4040,7 @@ require.define("/projects/zombiekit/coffee/world.coffee",function(require,module
       return this.pause(false);
     };
 
-    World.FPS = 15;
+    World.FPS = 5;
 
     return World;
 
@@ -4186,17 +4072,22 @@ require.define("/projects/zombiekit/coffee/game.coffee",function(require,module,
     Game.prototype.run = function(debug) {
       var path;
       this.world.reset();
+      this.debugMode = debug;
       this.agent = new AgentEntity(this.world, this.world.point({
         x: 1,
         y: 1
       }));
       this.world.addEntity(this.agent);
-      this.debugMode = debug;
       this.world.pointsOfInterest = [this.world.point(3, 3), this.world.point(7, 4), this.world.point(18, 6), this.world.point(19, 17), this.world.point(8, 17), this.world.point(3, 3)];
-      path = this.agent.findBestTour(this.world.pointsOfInterest);
-      console.log('Chosen path and cost: ', path, path.cost());
-      this.agent.setPath(path);
-      return this.agent.executePath();
+      if (debug) {
+        this.agent.findBestTour(this.world.pointsOfInterest);
+        return console.log('Finding path in debug mode');
+      } else {
+        path = this.agent.findBestTour(this.world.pointsOfInterest);
+        console.log('Chosen path and cost: ', path, path.cost());
+        this.agent.setPath(path);
+        return this.agent.executePath();
+      }
     };
 
     return Game;
@@ -4224,7 +4115,147 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
         x: 1,
         y: 1
       };
+      this.currentPoint = {};
+      this.currentGoalPoint = {};
+      this.treeHead = {};
+      this.treeCurrentNode = {};
+      this.paths = {};
+      this.currentPathPoints = [];
+      this.drawDebugFunction = void 0;
+      this.nextStep = void 0;
     }
+
+    Agent.prototype.findBestPath = function(originPoint, goalPoint) {
+      var existingPathKey;
+      existingPathKey = new Path([originPoint, goalPoint]).key();
+      if (this.paths[existingPathKey]) {
+        return this.paths[existingPathKey];
+      }
+      this.startPathFinding(originPoint, goalPoint);
+      while (this.nextStep !== this.endPathFinding) {
+        this.findNonCollidablePoints();
+        this.findUnvisitedPoints();
+        this.findNextBestPoint();
+      }
+      return this.endPathFinding();
+    };
+
+    Agent.prototype.startPathFinding = function(originPoint, goalPoint) {
+      if (originPoint.collidable === true || goalPoint.collidable === true) {
+        return void 0;
+      }
+      this.findingPath = true;
+      this.currentGoalPoint = goalPoint;
+      this.currentPoint = originPoint;
+      this.currentPoint.visited = true;
+      this.treeHead = this.treeCurrentNode = new Arboreal(null, this.currentPoint);
+      this.currentPathPoints = [];
+      return this.nextStep = this.findNonCollidablePoints;
+    };
+
+    Agent.prototype.findNonCollidablePoints = function() {
+      var ncpoints, point, _i, _len;
+      ncpoints = this.nonCollidablePointsFromPoint(this.currentPoint);
+      if (typeof this.drawDebugFunction === "function") {
+        this.drawDebugFunction({
+          point: this.currentPoint,
+          nonCollidablePoints: ncpoints
+        });
+      }
+      for (_i = 0, _len = ncpoints.length; _i < _len; _i++) {
+        point = ncpoints[_i];
+        this.treeCurrentNode.appendChild(point);
+      }
+      return this.nextStep = this.findUnvisitedPoints;
+    };
+
+    Agent.prototype.findUnvisitedPoints = function() {
+      var key, unvisitedPointsMap, upoint, visitedPoints, visitedPointsMap;
+      unvisitedPointsMap = {};
+      visitedPointsMap = {};
+      this.treeHead.traverseDown(function(node) {
+        var key;
+        key = node.data.x + '.' + node.data.y;
+        if (node.data.visited) {
+          visitedPointsMap[key] = node.data;
+        } else {
+          unvisitedPointsMap[key] = node.data;
+        }
+        return true;
+      });
+      this.unvisitedPoints = [];
+      for (key in unvisitedPointsMap) {
+        upoint = unvisitedPointsMap[key];
+        if (!visitedPointsMap[key]) {
+          this.unvisitedPoints.push(upoint);
+        }
+      }
+      if (this.drawDebugFunction) {
+        visitedPoints = [];
+        for (key in visitedPointsMap) {
+          upoint = visitedPointsMap[key];
+          visitedPoints.push(upoint);
+        }
+        this.drawDebugFunction({
+          visitedPoints: visitedPoints,
+          unvisitedPoints: this.unvisitedPoints
+        });
+      }
+      this.nextStep = this.findNextBestPoint;
+      if (this.unvisitedPoints.length === 0) {
+        return false;
+      }
+      return true;
+    };
+
+    Agent.prototype.findNextBestPoint = function() {
+      var bestPoint, bestPointHeuristicValue, point, pointHeuristicValue, _i, _len, _ref,
+        _this = this;
+      bestPoint = this.unvisitedPoints[0];
+      bestPointHeuristicValue = this.heuristicValue(bestPoint, this.currentGoalPoint, this.treeHead);
+      _ref = this.unvisitedPoints.slice(1);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        pointHeuristicValue = this.heuristicValue(point, this.currentGoalPoint, this.treeHead);
+        if (pointHeuristicValue < bestPointHeuristicValue) {
+          bestPoint = point;
+          bestPointHeuristicValue = pointHeuristicValue;
+        }
+      }
+      if (typeof this.drawDebugFunction === "function") {
+        this.drawDebugFunction({
+          point: bestPoint
+        });
+      }
+      this.currentPoint = bestPoint;
+      this.currentPoint.visited = true;
+      this.treeCurrentNode = this.treeHead.find(function(node) {
+        return node.data === _this.currentPoint;
+      });
+      if (this.currentPoint.equals(this.currentGoalPoint)) {
+        return this.nextStep = this.endPathFinding;
+      } else {
+        return this.nextStep = this.findNonCollidablePoints;
+      }
+    };
+
+    Agent.prototype.endPathFinding = function() {
+      var path, _ref;
+      while (this.treeCurrentNode) {
+        this.currentPathPoints.push((_ref = this.treeCurrentNode) != null ? _ref.data : void 0);
+        this.treeCurrentNode = this.treeCurrentNode.parent;
+      }
+      if (typeof this.drawDebugFunction === "function") {
+        this.drawDebugFunction();
+      }
+      this.currentPathPoints.reverse();
+      path = new Path(this.currentPathPoints);
+      this.paths[path.key()] = path;
+      this.findingPath = false;
+      this.treeHead = this.treeCurrentNode = void 0;
+      this.nextStep = void 0;
+      return path;
+    };
 
     Agent.prototype.nonCollidablePointsFromPoint = function(point) {
       var down, left, ncpoint, nonCollidablePoints, right, up, _i, _len, _ref;
@@ -4255,94 +4286,6 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
       return nonCollidablePoints;
     };
 
-    Agent.prototype.findBestPath = function(originPoint, goalPoint, drawDebug) {
-      var bestPoint, bestPointHeuristicValue, bestRoute, currentPoint, key, ncpoints, point, pointHeuristicValue, treeCurrentNode, treeHead, unvisitedPoints, unvisitedPointsMap, upoint, visitedPoints, visitedPointsMap, _i, _j, _len, _len1, _ref;
-      if (originPoint.collidable === true || goalPoint.collidable === true) {
-        return void 0;
-      }
-      currentPoint = originPoint;
-      currentPoint.visited = true;
-      treeHead = treeCurrentNode = new Arboreal(null, currentPoint);
-      bestRoute = [];
-      if (typeof drawDebug === "function") {
-        drawDebug({
-          point: currentPoint
-        });
-      }
-      while (!currentPoint.equals(goalPoint)) {
-        ncpoints = this.nonCollidablePointsFromPoint(currentPoint);
-        if (typeof drawDebug === "function") {
-          drawDebug({
-            nonCollidablePoints: ncpoints
-          });
-        }
-        for (_i = 0, _len = ncpoints.length; _i < _len; _i++) {
-          point = ncpoints[_i];
-          treeCurrentNode.appendChild(point);
-        }
-        unvisitedPointsMap = {};
-        visitedPointsMap = {};
-        treeHead.traverseDown(function(node) {
-          var key;
-          key = node.data.x + '.' + node.data.y;
-          if (node.data.visited) {
-            visitedPointsMap[key] = node.data;
-          } else {
-            unvisitedPointsMap[key] = node.data;
-          }
-          return true;
-        });
-        unvisitedPoints = [];
-        for (key in unvisitedPointsMap) {
-          upoint = unvisitedPointsMap[key];
-          if (!visitedPointsMap[key]) {
-            unvisitedPoints.push(upoint);
-          }
-        }
-        if (drawDebug) {
-          visitedPoints = [];
-          for (key in visitedPointsMap) {
-            upoint = visitedPointsMap[key];
-            visitedPoints.push(upoint);
-          }
-          drawDebug({
-            visitedPoints: visitedPoints,
-            unvisitedPoints: unvisitedPoints
-          });
-        }
-        bestPoint = unvisitedPoints[0];
-        bestPointHeuristicValue = this.heuristicValue(bestPoint, goalPoint, treeHead);
-        _ref = unvisitedPoints.slice(1);
-        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-          point = _ref[_j];
-          pointHeuristicValue = this.heuristicValue(point, goalPoint, treeHead);
-          if (pointHeuristicValue < bestPointHeuristicValue) {
-            bestPoint = point;
-            bestPointHeuristicValue = pointHeuristicValue;
-          }
-        }
-        if (typeof drawDebug === "function") {
-          drawDebug({
-            point: bestPoint
-          });
-        }
-        currentPoint = bestPoint;
-        currentPoint.visited = true;
-        treeCurrentNode = treeHead.find(function(node) {
-          return node.data === currentPoint;
-        });
-      }
-      while (treeCurrentNode) {
-        bestRoute.push(treeCurrentNode != null ? treeCurrentNode.data : void 0);
-        treeCurrentNode = treeCurrentNode.parent;
-      }
-      if (typeof drawDebug === "function") {
-        drawDebug();
-      }
-      bestRoute.reverse();
-      return new Path(bestRoute);
-    };
-
     Agent.prototype.heuristicValue = function(point, goalPoint, treeHead) {
       return (this.distanceToPoint(point, goalPoint) * 10) + this.pathCost(point, treeHead);
     };
@@ -4364,31 +4307,45 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
       return cost;
     };
 
-    Agent.prototype.findBestTour = function(points, drawDebug) {
-      var array, i, key, path, paths, permutations, point, reversePath, tour, tpath, _i, _j, _len, _len1;
+    Agent.prototype.findBestTour = function(points) {
+      var array, path, tour, _i, _len, _ref;
       console.log('Finding best tour...');
       console.log(points);
-      permutations = this.permutationsTwoByTwo(points);
-      paths = {};
-      for (_i = 0, _len = permutations.length; _i < _len; _i++) {
-        array = permutations[_i];
-        path = this.findBestPath(array[0], array[1], drawDebug);
-        paths[path.key()] = path;
-        reversePath = new Path(path.points).reverse();
-        paths[reversePath.key()] = reversePath;
+      this.tourPoints = points;
+      this.permutations = this.permutationsTwoByTwo(points);
+      this.paths = {};
+      if (!game.debugMode) {
+        _ref = this.permutations;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          array = _ref[_i];
+          path = this.findBestPath(array[0], array[1]);
+          this.putPathInCache(path);
+        }
+        tour = this.findTourFromPoints(points);
+        console.log('Best tour found.');
+        return tour;
       }
-      console.log(paths);
+    };
+
+    Agent.prototype.findTourFromPoints = function(points) {
+      var i, key, point, tour, tpath, _i, _len;
       tour = new Path([]);
-      for (i = _j = 0, _len1 = points.length; _j < _len1; i = ++_j) {
+      for (i = _i = 0, _len = points.length; _i < _len; i = ++_i) {
         point = points[i];
         tpath = new Path(points.slice(i, (i + 1) + 1 || 9e9));
         key = tpath.key();
         if (i < points.length - 1) {
-          tour.addPath(paths[key]);
+          tour.addPath(this.paths[key]);
         }
       }
-      console.log('Best tour found.');
       return tour;
+    };
+
+    Agent.prototype.putPathInCache = function(path) {
+      var reversePath;
+      this.paths[path.key()] = path;
+      reversePath = new Path(path.points).reverse();
+      return this.paths[reversePath.key()] = reversePath;
     };
 
     Agent.prototype.permutationsTwoByTwo = function(arr) {
@@ -4409,11 +4366,167 @@ require.define("/projects/zombiekit/coffee/agent.coffee",function(require,module
       return results.concat(this.permutationsTwoByTwo(arr.slice(1)));
     };
 
+    Agent.prototype.update = function() {
+      var path, tour, _ref;
+      if (this.nextStep) {
+        if (this.nextStep === this.endPathFinding) {
+          path = this.endPathFinding();
+          this.putPathInCache(path);
+          if (!this.tourPoints) {
+            if (typeof this.endPathFindCallback === "function") {
+              this.endPathFindCallback(path);
+            }
+          }
+          if (this.permutations.length === 0) {
+            tour = this.findTourFromPoints(this.tourPoints);
+            return typeof this.endPathFindCallback === "function" ? this.endPathFindCallback(tour) : void 0;
+          }
+        } else {
+          return this.nextStep();
+        }
+      } else if (((_ref = this.permutations) != null ? _ref.length : void 0) !== 0) {
+        this.startPathFinding(this.permutations[0][0], this.permutations[0][1]);
+        return this.permutations = this.permutations.slice(1);
+      }
+    };
+
     return Agent;
 
   })();
 
   module.exports = Agent;
+
+}).call(this);
+
+});
+
+require.define("/projects/zombiekit/coffee/agent-entity.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var Agent, AgentEntity, Entity, Point,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Entity = require("./entity");
+
+  Agent = require("./agent");
+
+  Point = require("./point");
+
+  AgentEntity = (function(_super) {
+
+    __extends(AgentEntity, _super);
+
+    function AgentEntity() {
+      this.endPathFindCallback = __bind(this.endPathFindCallback, this);
+
+      this.drawDebug = __bind(this.drawDebug, this);
+      AgentEntity.__super__.constructor.apply(this, arguments);
+      this.agent = new Agent(this.world.map);
+      if (game.debugMode) {
+        this.agent.drawDebugFunction = this.drawDebug;
+        this.agent.endPathFindCallback = this.endPathFindCallback;
+        this.debugShape = new createjs.Shape(new createjs.Graphics());
+      }
+      this.shape = this.createShape();
+      this.shape.onTick = function() {};
+      this.followPath = false;
+    }
+
+    AgentEntity.prototype.drawPoint = function(point, color) {
+      return this.debugShape.graphics.setStrokeStyle(3).beginStroke(color).drawCircle((-this.world.tileSize / 2) + (point.x * this.world.tileSize), (-this.world.tileSize / 2) + (point.y * this.world.tileSize), 12);
+    };
+
+    AgentEntity.prototype.drawDebug = function(options) {
+      var nonCollidablePoints, point, unvisitedPoints, upoint, visitedPoints, _i, _j, _k, _len, _len1, _len2;
+      if (options) {
+        if (options.unvisitedPoints) {
+          unvisitedPoints = options.unvisitedPoints;
+          for (_i = 0, _len = unvisitedPoints.length; _i < _len; _i++) {
+            upoint = unvisitedPoints[_i];
+            this.drawPoint(upoint, createjs.Graphics.getRGB(0, 230, 0, 1));
+          }
+        }
+        if (options.visitedPoints) {
+          visitedPoints = options.visitedPoints;
+          for (_j = 0, _len1 = visitedPoints.length; _j < _len1; _j++) {
+            upoint = visitedPoints[_j];
+            this.drawPoint(upoint, createjs.Graphics.getRGB(230, 230, 0, 1));
+          }
+        }
+        if (options.nonCollidablePoints) {
+          nonCollidablePoints = options.nonCollidablePoints;
+          for (_k = 0, _len2 = nonCollidablePoints.length; _k < _len2; _k++) {
+            upoint = nonCollidablePoints[_k];
+            this.drawPoint(upoint, createjs.Graphics.getRGB(0, 0, 230, 1));
+          }
+        }
+        if (options.point) {
+          point = options.point;
+          this.drawPoint(point, createjs.Graphics.getRGB(230, 0, 0, 1));
+        }
+        this.world.stage.update();
+        return true;
+      } else {
+        this.debugShape.graphics.clear();
+        this.world.stage.update();
+        return false;
+      }
+    };
+
+    AgentEntity.prototype.findBestPathDebug = function(originPoint, goalPoint) {
+      return this.agent.startPathFinding(originPoint, goalPoint);
+    };
+
+    AgentEntity.prototype.findBestTour = function(args) {
+      return this.agent.findBestTour(args);
+    };
+
+    AgentEntity.prototype.setPath = function(path) {
+      this.setPosition(path.points[0]);
+      return this.path = path;
+    };
+
+    AgentEntity.prototype.executePath = function() {
+      return this.followPath = true;
+    };
+
+    AgentEntity.prototype.createShape = function() {
+      var circle, g;
+      g = new createjs.Graphics();
+      g.setStrokeStyle(5);
+      g.beginStroke(createjs.Graphics.getRGB(0, 0, 0, 1));
+      g.drawCircle(-this.world.tileSize / 2, -this.world.tileSize / 2, 15);
+      circle = new createjs.Shape(g);
+      return circle;
+    };
+
+    AgentEntity.prototype.update = function() {
+      var newPosition;
+      if (this.followPath) {
+        newPosition = this.path.nextPoint(this.position);
+        if (newPosition.equals(this.position)) {
+          this.followPath = false;
+          this.world.pause();
+          return;
+        }
+        this.position = newPosition;
+        this.shape.x = this.position.x * this.world.tileSize;
+        return this.shape.y = this.position.y * this.world.tileSize;
+      } else if (game.debugMode) {
+        return this.agent.update();
+      }
+    };
+
+    AgentEntity.prototype.endPathFindCallback = function(path) {
+      this.setPath(path);
+      return this.executePath();
+    };
+
+    return AgentEntity;
+
+  })(Entity);
+
+  module.exports = AgentEntity;
 
 }).call(this);
 
