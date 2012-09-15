@@ -57,7 +57,7 @@ class World
     @entities = []
     @pause(false)
 
-  @FPS = 15
+  @FPS = 5
 
 
 ## export

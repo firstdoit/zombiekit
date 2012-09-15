@@ -6,12 +6,15 @@ class AgentEntity extends Entity
   constructor: ->
     super
     @agent = new Agent(@world.map)
-    if game.debugMode then @agent.drawDebugFunction = @drawDebug
+    if game.debugMode
+      @agent.drawDebugFunction = @drawDebug
+      @agent.endPathFindCallback = @endPathFindCallback
+      @debugShape = new createjs.Shape(new createjs.Graphics())
+
     @shape = @createShape()
     @shape.onTick = ->
       ##console.log 'shape tick'
     @followPath = false
-    @debugShape = new createjs.Shape(new createjs.Graphics())
 
   drawPoint: (point, color) ->
     @debugShape
@@ -48,6 +51,9 @@ class AgentEntity extends Entity
       @world.stage.update()
       return false
 
+  findBestPathDebug: (originPoint, goalPoint) ->
+    @agent.startPathFinding(originPoint, goalPoint)
+
   findBestTour: (args) -> @agent.findBestTour(args)
 
   setPath: (path) ->
@@ -69,11 +75,18 @@ class AgentEntity extends Entity
     if @followPath
       newPosition = @path.nextPoint(@position)
       if newPosition.equals @position
+        @followPath = false
         @world.pause()
         return
       @position = newPosition
       @shape.x = @position.x * @world.tileSize
       @shape.y = @position.y * @world.tileSize
+    else if game.debugMode
+      @agent.update()
+
+  endPathFindCallback: (path) =>
+    @setPath(path)
+    @executePath()
 
 ## export
 module.exports = AgentEntity
