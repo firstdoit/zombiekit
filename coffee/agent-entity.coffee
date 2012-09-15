@@ -15,6 +15,7 @@ class AgentEntity extends Entity
     @shape.onTick = ->
       ##console.log 'shape tick'
     @followPath = false
+    @timeSpent = 0
 
   drawPoint: (point, color) ->
     @debugShape
@@ -74,6 +75,8 @@ class AgentEntity extends Entity
   update: ->
     if @followPath
       newPosition = @path.nextPoint(@position)
+      @timeSpent += newPosition.cost
+      console.log 'Total time spent:', @timeSpent, 'Time spent now:', newPosition.cost
       if newPosition.equals @position
         @followPath = false
         @world.pause()

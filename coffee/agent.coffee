@@ -152,7 +152,7 @@ class Agent
 
   ## Calculate the heuristic value of this point, given a goal point and a points tree
   heuristicValue: (point, goalPoint, treeHead) ->
-    return ( @distanceToPoint(point, goalPoint) * 10 ) + @pathCost(point, treeHead)
+    return ( @distanceToPoint(point, goalPoint) * Agent.distanceToPointWeight ) + @pathCost(point, treeHead)
 
   ## Calculate the Manhattan distance from pointA to pointB
   distanceToPoint: (pointA, pointB) ->
@@ -182,33 +182,96 @@ class Agent
 
       ## Ache o tour direto
       tour = @findTourFromPoints()
-      console.log 'Best tour found.'
-      return tour
+      console.log 'Best tour found: ', tour
+      return Path.pathFromPoints(tour, @paths)
 
   generateRandomPopulation: ->
-    for i in [1..20]
+    @randomPopulation = []
+    for i in [1..Agent.sizeOfInitialPopulation]
       ## make a copy
       individual = [].concat @tourPoints
       ## switch two places in the middle - dont switch start or finish
-      for j in [0..4]
-        switchIndex = Math.floor(Math.random() * (individual.length - 3)) + 1
-        point = individual[switchIndex]
-        individual[switchIndex] = individual[switchIndex + 1]
-        individual[switchIndex + 1] = point
-      console.log individual
+      for j in [0..10]
+        @mutateIndividual(individual)
 
-      @randomPopulation.push(Path.pathFromPoints(individual, @paths))
+      @randomPopulation.push(individual)
 
-    console.log 'Created random population: ', @randomPopulation
-    console.log path.cost() for path in @randomPopulation
+    ###console.log 'Created random population: ', @randomPopulation
+    console.log path.cost() for path in @randomPopulation###
 
-  chooseAndCrossIndividuals: ->
+  chooseIndividuals: ->
+    chosenIndividuals = []
+    ratingArray = []
+    totalRating = 0
+    ratingArray.push @individualRating(individual) for individual in @randomPopulation
+    totalRating += rating for rating in ratingArray
+    while chosenIndividuals.length < 2
+      rand1 = Math.random() * totalRating
+      rand2 = Math.random() * totalRating
+      ratingSoFar = 0
+      for rating,i in ratingArray
+        if chosenIndividuals.length is 2
+          break
+        ratingSoFar += rating
+        if rand1 < ratingSoFar
+          chosenIndividuals.push @randomPopulation[i]
+          continue
+        if rand2 < ratingSoFar
+          chosenIndividuals.push @randomPopulation[i]
+        continue
+
+    return chosenIndividuals
+
+  crossIndividuals: (individuals) ->
+    length = individuals[0].length
+    crossIndex = Math.floor(Math.random() * (length - 3)) + 1
+    ## Change the position of this value in the second individual so it is at crossIndex
+    crossValue = individuals[0][crossIndex]
+    indexOfValue = i for value, i in individuals[1] when value.equals crossValue
+
+    direction = if indexOfValue < crossIndex then 1 else -1
+    i = indexOfValue
+    while not individuals[1][crossIndex].equals crossValue
+      ## Otherwise, keep switching positions
+      point = individuals[1][i]
+      individuals[1][i] = individuals[1][i + direction]
+      individuals[1][i + direction] = point
+      i += direction
+
+    if Math.random() < Agent.mutationChance
+      @mutateIndividual(individuals[0])
+    if Math.random() < Agent.mutationChance
+      @mutateIndividual(individuals[1])
+
+  individualRating: (individual) ->
+    cost = Path.pathFromPoints(individual, @paths).cost()
+    return if cost < Agent.costLimit then Agent.costLimit - cost else 0
+
+  mutateIndividual: (individual) ->
+    switchIndex = Math.floor(Math.random() * (individual.length - 3)) + 1
+    point = individual[switchIndex]
+    individual[switchIndex] = individual[switchIndex + 1]
+    individual[switchIndex + 1] = point
+    return individual
 
   findTourFromPoints: ->
     @generateRandomPopulation()
-    @chooseAndCrossIndividuals()
+    ## Cross and mutate the individuals for a better population
+    for i in [0..Agent.numberOfGenerations]
+      individuals = @chooseIndividuals()
+      @crossIndividuals(individuals)
 
-    return Path.pathFromPoints(@tourPoints, @paths)
+    ## Choose the best individual found
+    bestIndividiual = @randomPopulation[0]
+    bestRating = @individualRating(bestIndividiual)
+    for individual in @randomPopulation
+      rating = @individualRating(individual)
+      if (rating > bestRating)
+        bestIndividiual = individual
+        bestRating = rating
+        console.log 'best rating:', bestRating
+
+    return bestIndividiual
 
   putPathInCache: (path) ->
     @paths[path.key()] = path
@@ -253,6 +316,12 @@ class Agent
       @startPathFinding(@permutations[0][0], @permutations[0][1])
       @permutations = @permutations[1..]
 
+  ## Static
+  @mutationChance = 0.05
+  @costLimit = 1000
+  @numberOfGenerations = 500
+  @sizeOfInitialPopulation = 50
+  @distanceToPointWeight = 10
 
 ## export
 module.exports = Agent
