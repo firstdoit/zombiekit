@@ -4,17 +4,25 @@ Path = require("./path")
 class Agent
   constructor: (@map) ->
     @position = {x: 1, y: 1}
+    @drawDebugFunction = undefined
+
+    ## A* properties
     @currentPoint = {}
     @currentGoalPoint = {}
     @treeHead = {}
     @treeCurrentNode = {}
-    @paths = {}
-    @currentPathPoints = []
-    @drawDebugFunction = undefined
     @nextStep = undefined
 
-    ## A* implementation
+    ## Genetic Algorithm properties
+    @paths = {}
+    @currentPathPoints = []
+    @tourPoints = undefined
+    @randomPopulation = []
+
+  ## A* implementation
   findBestPath: (originPoint, goalPoint) ->
+    unvisitedPointsLeft = true
+
     ## Check if it's a known path
     existingPathKey = new Path([originPoint, goalPoint]).key()
     return @paths[existingPathKey] if @paths[existingPathKey]
@@ -25,7 +33,9 @@ class Agent
     ## While we haven't found the goal point
     while @nextStep isnt @endPathFinding
       @findNonCollidablePoints()
-      @findUnvisitedPoints()
+      unvisitedPointsLeft = @findUnvisitedPoints()
+      if not unvisitedPointsLeft
+        @endPathFinding()
       @findNextBestPoint()
 
     @endPathFinding()
@@ -171,17 +181,34 @@ class Agent
         @putPathInCache(path)
 
       ## Ache o tour direto
-      tour = @findTourFromPoints(points)
+      tour = @findTourFromPoints()
       console.log 'Best tour found.'
       return tour
 
-  findTourFromPoints: (points) ->
-    tour = new Path([])
-    for point, i in points
-      tpath = new Path(points[i..i+1])
-      key = tpath.key()
-      tour.addPath @paths[key] if i < points.length - 1
-    return tour
+  generateRandomPopulation: ->
+    for i in [1..20]
+      ## make a copy
+      individual = [].concat @tourPoints
+      ## switch two places in the middle - dont switch start or finish
+      for j in [0..4]
+        switchIndex = Math.floor(Math.random() * (individual.length - 3)) + 1
+        point = individual[switchIndex]
+        individual[switchIndex] = individual[switchIndex + 1]
+        individual[switchIndex + 1] = point
+      console.log individual
+
+      @randomPopulation.push(Path.pathFromPoints(individual, @paths))
+
+    console.log 'Created random population: ', @randomPopulation
+    console.log path.cost() for path in @randomPopulation
+
+  chooseAndCrossIndividuals: ->
+
+  findTourFromPoints: ->
+    @generateRandomPopulation()
+    @chooseAndCrossIndividuals()
+
+    return Path.pathFromPoints(@tourPoints, @paths)
 
   putPathInCache: (path) ->
     @paths[path.key()] = path
@@ -211,8 +238,14 @@ class Agent
 
         ## We just found the last path
         if @permutations.length is 0
-          tour = @findTourFromPoints(@tourPoints)
+          tour = @findTourFromPoints()
           @endPathFindCallback?(tour)
+
+      else if @nextStep is @findUnvisitedPoints
+        unvisitedPointsLeft = @findUnvisitedPoints()
+        ## end the search prematurely as its impossible to get to the destination
+        if not unvisitedPointsLeft
+          @nextPath = @endPathFinding
 
       else
         @nextStep()

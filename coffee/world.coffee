@@ -1,7 +1,6 @@
 MapFactory = require("./map-factory")
 Agent = require("./agent")
 TiledMapRenderer = require("./tiled-map-renderer")
-Zepto = require("../lib/zepto")
 Q = require("q")
 
 class World
