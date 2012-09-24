@@ -308,7 +308,6 @@ class Agent
         unvisitedPointsLeft = @findUnvisitedPoints()
         ## end the search prematurely as its impossible to get to the destination
         if not unvisitedPointsLeft
-          game.world.pause()
           throw new Error("No path available!")
 
       else
